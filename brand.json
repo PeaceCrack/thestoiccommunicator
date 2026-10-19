@@ -1,0 +1,14 @@
+{
+  "name": "The Stoic Communicator",
+  "handle": "@thestoiccommunicator",
+  "site": "THINK · SPEAK · INFLUENCE",
+  "motto": "Think like Plato. Speak like a leader. Influence like a CEO.",
+  "tagline": "Ancient philosophy for modern dominance",
+  "logo": "logo.jpg",
+  "font": "Inter",
+  "voice": {
+    "name": "en-US-AndrewMultilingualNeural",
+    "rate": "-6%",
+    "pitch": "-6Hz"
+  }
+}

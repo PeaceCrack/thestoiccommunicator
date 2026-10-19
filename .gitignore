@@ -1,0 +1,16 @@
+out/*/html/
+out/*/reel-work/
+out/*/voice/
+out/*/frames/
+out/example-*/
+out/voice-samples/
+out/music-test/
+__pycache__/
+.venv/
+.DS_Store
+.env
+*.token
+client_secret*.json
+.chrome-cache/
+out/*/review/
+voice-samples/

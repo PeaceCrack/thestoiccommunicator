@@ -1,0 +1,268 @@
+{
+  "slug": "example-burn-the-letters",
+  "date": "2026-10-20",
+  "pillar": "influence",
+  "philosopher": "Marcus Aurelius",
+  "topic": "Restraint as power: refusing to collect grudges",
+  "story": {
+    "title": "Marcus Aurelius burns Avidius Cassius's letters unread",
+    "who": "Marcus Aurelius",
+    "when": "175 AD"
+  },
+  "quotes": [
+    "The best revenge is not to be like your enemy."
+  ],
+  "facts": [
+    {
+      "claim": "After the revolt of Avidius Cassius, Marcus had the rebel's letters burned without reading them",
+      "source": "Cassius Dio, Roman History, Book 72"
+    }
+  ],
+  "theme": "colosseum",
+  "palette": "imperial-gold",
+  "fonts": "cinzel",
+  "seed": 4127,
+  "reel_style": {
+    "mood": "epic",
+    "transitions": [
+      "fadeblack",
+      "smoothup",
+      "circleopen",
+      "hblur"
+    ],
+    "motions": [
+      "push",
+      "pull"
+    ],
+    "caption_font": "Arial Black"
+  },
+  "alt_text": "Gold Cinzel lettering on a dark arena backdrop reads: HE BURNED THE LETTERS.",
+  "search_terms": [
+    "stoic leadership",
+    "marcus aurelius"
+  ],
+  "slides": [
+    {
+      "kind": "cover",
+      "headline": "HE BURNED THE LETTERS",
+      "body": "The emperor's most powerful move was the one he refused to make.",
+      "animate": true
+    },
+    {
+      "kind": "stake",
+      "kicker": "ROME, 175 AD",
+      "headline": "A general declares himself emperor",
+      "visual": {
+        "type": "story",
+        "when": "Syria, 175 AD",
+        "text": "Avidius Cassius, one of Rome's best generals, hears Marcus is dead and claims the throne. He is wrong. Marcus is alive.",
+        "who": "Cassius Dio, Roman History 72"
+      }
+    },
+    {
+      "kind": "content",
+      "headline": "The rebellion collapses",
+      "body": "Within three months Cassius is killed by his own officers. His letters reveal who backed him.",
+      "visual": {
+        "type": "timeline",
+        "items": [
+          [
+            "SPRING",
+            "Cassius claims the throne"
+          ],
+          [
+            "SUMMER",
+            "His own men turn on him"
+          ],
+          [
+            "AFTER",
+            "His letters reach Marcus"
+          ]
+        ]
+      }
+    },
+    {
+      "kind": "content",
+      "headline": "Marcus burns them unread",
+      "body": "He never learned which senators betrayed him. He chose not to.",
+      "visual": {
+        "type": "compare",
+        "left": {
+          "title": "THE USUAL MOVE",
+          "lines": [
+            "Read every letter",
+            "Purge the traitors",
+            "Rule through fear"
+          ]
+        },
+        "right": {
+          "title": "THE STOIC MOVE",
+          "lines": [
+            "Burn them unread",
+            "Keep every ally",
+            "Rule through trust"
+          ]
+        }
+      }
+    },
+    {
+      "kind": "content",
+      "headline": "Grudges are a tax",
+      "body": "Every enemy you track costs attention you could spend leading.",
+      "visual": {
+        "type": "icons",
+        "cols": 3,
+        "items": [
+          [
+            "eye",
+            "Attention"
+          ],
+          [
+            "hourglass",
+            "Time"
+          ],
+          [
+            "handshake",
+            "Allies"
+          ]
+        ]
+      }
+    },
+    {
+      "kind": "content",
+      "headline": "Use it on Monday",
+      "visual": {
+        "type": "checklist",
+        "done": 3,
+        "items": [
+          "Someone undermined you: note the lesson, drop the file",
+          "Do not ask who said what",
+          "Treat them by their next action, not their last"
+        ]
+      }
+    },
+    {
+      "kind": "recap",
+      "headline": "Restraint is leverage",
+      "items": [
+        "Power that is not used still lands",
+        "Grudges drain the leader first",
+        "Forgiving fast keeps the room loyal"
+      ]
+    },
+    {
+      "kind": "cta",
+      "headline": "FOLLOW FOR DAILY STOIC POWER",
+      "body": "Think like Plato. Speak like a leader. Influence like a CEO."
+    }
+  ],
+  "caption": "He held proof of who betrayed him. He burned it unread.\n\nIn 175 AD the general Avidius Cassius tried to take Rome. When the revolt failed, his letters reached Marcus Aurelius. Marcus burned them without reading a line.\n\nThat is stoic leadership: power you hold back still speaks. Marcus Aurelius knew grudges cost the one who keeps them.\n\nSave this for the next time someone crosses you at work.\n\n#stoicism #leadership #marcusaurelius",
+  "reel_caption": "The most powerful thing Marcus Aurelius ever did was refuse to read a letter.\n\nSave this for the next time someone crosses you.\n\n#stoicism #leadership #marcusaurelius",
+  "youtube": {
+    "title": "The Emperor Who Burned The Evidence #Shorts",
+    "description": "In 175 AD Marcus Aurelius burned the letters that named his betrayers, unread. Restraint is leverage.\n\nSource: Cassius Dio, Roman History, Book 72.\n\nThink like Plato. Speak like a leader. Influence like a CEO.\n\n#Shorts #stoicism #leadership",
+    "tags": [
+      "stoicism",
+      "marcus aurelius",
+      "leadership",
+      "stoic",
+      "philosophy",
+      "influence"
+    ]
+  },
+  "reel": {
+    "beats": [
+      {
+        "kind": "hook",
+        "kicker": "ROME, 175 AD",
+        "headline": "HE BURNED THE EVIDENCE",
+        "voice": "He had proof of everyone who betrayed him. And he burned it."
+      },
+      {
+        "kind": "story",
+        "headline": "A general claims the throne",
+        "visual": {
+          "type": "story",
+          "when": "Syria, 175 AD",
+          "text": "Avidius Cassius hears the emperor is dead, and declares himself emperor."
+        },
+        "voice": "175 AD. General Avidius Cassius hears Marcus Aurelius is dead, and declares himself emperor."
+      },
+      {
+        "kind": "story",
+        "headline": "But Marcus was alive",
+        "body": "Within months, Cassius's own officers killed him.",
+        "voice": "But Marcus was alive. Within months, Cassius was killed by his own officers."
+      },
+      {
+        "kind": "fact",
+        "kicker": "THE LETTERS",
+        "headline": "Proof of every traitor",
+        "visual": {
+          "type": "icons",
+          "cols": 3,
+          "items": [
+            [
+              "scroll",
+              "Letters"
+            ],
+            [
+              "mask",
+              "Names"
+            ],
+            [
+              "sword",
+              "Leverage"
+            ]
+          ]
+        },
+        "voice": "Then his letters reached Marcus. Inside: every senator who backed the revolt."
+      },
+      {
+        "kind": "lesson",
+        "headline": "He burned them unread",
+        "visual": {
+          "type": "compare",
+          "left": {
+            "title": "USUAL MOVE",
+            "lines": [
+              "Read",
+              "Purge",
+              "Fear"
+            ]
+          },
+          "right": {
+            "title": "STOIC MOVE",
+            "lines": [
+              "Burn",
+              "Keep allies",
+              "Trust"
+            ]
+          }
+        },
+        "voice": "Any other ruler would purge them. Marcus burned the letters unread."
+      },
+      {
+        "kind": "quote",
+        "visual": {
+          "type": "quote",
+          "text": "The best revenge is not to be like your enemy.",
+          "who": "Marcus Aurelius, Meditations 6.6"
+        },
+        "voice": "He wrote: the best revenge is not to be like your enemy."
+      },
+      {
+        "kind": "takeaway",
+        "headline": "Restraint is leverage",
+        "body": "Grudges tax the leader first. Judge people by their next move.",
+        "voice": "Grudges tax the leader first. Judge people by their next move, not their last."
+      },
+      {
+        "kind": "cta",
+        "headline": "FOLLOW FOR STOIC POWER",
+        "body": "Think like Plato. Speak like a leader. Influence like a CEO.",
+        "voice": "Follow to think like Plato, speak like a leader, and influence like a CEO."
+      }
+    ]
+  }
+}
