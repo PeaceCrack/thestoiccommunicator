@@ -38,6 +38,14 @@ ZOOM = 0.035
 MAX_SECONDS = 59.0            # keep Shorts and Reels under a minute
 MAX_BYTES = 19 * 1024 * 1024  # jsDelivr serves files up to 20 MB, and Instagram fetches the reel there
 BITRATES_K = (2800, 2100, 1500)
+# Instagram's Reels ingest rejects some valid H.264 files with a bare "ERROR" (high levels,
+# 24 fps, untagged colour). These settings match its published spec and are safe for YouTube too.
+OUT_FPS = 30
+IG_VIDEO_ARGS = ("-r", str(OUT_FPS), "-c:v", "libx264", "-preset", "slow", "-profile:v", "high", "-level:v", "4.1",
+                 "-crf", "21", "-g", str(OUT_FPS * 2), "-keyint_min", str(OUT_FPS * 2), "-sc_threshold", "0",
+                 "-bf", "2", "-pix_fmt", "yuv420p", "-color_primaries", "bt709", "-color_trc", "bt709",
+                 "-colorspace", "bt709", "-tag:v", "avc1", "-movflags", "+faststart")
+IG_AUDIO_ARGS = ("-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-ac", "2")
 TRANSITIONS = ("fade", "fadeblack", "smoothleft", "smoothup", "circleopen", "slideup", "wipeleft", "radial",
                "dissolve", "zoomin", "hblur", "squeezev")
 
@@ -136,10 +144,8 @@ def final_cut(clips: list[Path], slots: list[Slot], transitions: list[str], audi
         last = f"[x{i}]"
     chain.append(f"{last}ass={ass.name},noise=alls=5:allf=u,vignette=PI/5,format=yuv420p[v]")
     run_ffmpeg([*inputs, "-i", str(audio), "-filter_complex", ";".join(chain),
-                "-map", "[v]", "-map", f"{len(clips)}:a", "-r", str(FPS),
-                "-c:v", "libx264", "-preset", "slow", "-profile:v", "high", "-crf", "21",
-                "-maxrate", f"{kbps}k", "-bufsize", f"{kbps * 2}k",
-                "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-shortest", "-movflags", "+faststart", str(out)])
+                "-map", "[v]", "-map", f"{len(clips)}:a", *IG_VIDEO_ARGS,
+                "-maxrate", f"{kbps}k", "-bufsize", f"{kbps * 2}k", *IG_AUDIO_ARGS, "-shortest", str(out)])
     return out
 
 
