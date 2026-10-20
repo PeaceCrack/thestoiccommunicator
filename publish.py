@@ -216,12 +216,17 @@ def publish_carousel(post: dict, cfg: dict) -> tuple[str, list[int]]:
     return ig_publish(cfg, carousel), fallbacks
 
 
+COVER_FRAME_MS = 2500  # thumbnail taken from the video when the custom cover is refused
+
+
 def publish_reel(post: dict, cfg: dict) -> str:
-    container = ig_create(cfg, {
-        "media_type": "REELS", "video_url": f"{folder_url(cfg['video_base'], post)}/reel.mp4",
-        "cover_url": f"{folder_url(cfg['media_base'], post)}/reel_cover.jpg",
-        "caption": post["reel_caption"], "share_to_feed": "true",
-    })
+    base = {"media_type": "REELS", "video_url": f"{folder_url(cfg['video_base'], post)}/reel.mp4",
+            "caption": post["reel_caption"], "share_to_feed": "true"}
+    try:
+        container = ig_create(cfg, {**base, "cover_url": f"{folder_url(cfg['media_base'], post)}/reel_cover.jpg"})
+    except PublishError as err:
+        print(f"  reel with custom cover rejected, retrying with a frame from the video: {err}")
+        container = ig_create(cfg, {**base, "thumb_offset": str(COVER_FRAME_MS)})
     return ig_publish(cfg, container)
 
 
