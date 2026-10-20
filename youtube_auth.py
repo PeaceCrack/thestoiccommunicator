@@ -21,7 +21,6 @@ import subprocess
 import sys
 import threading
 import urllib.parse
-import urllib.request
 import webbrowser
 from pathlib import Path
 
@@ -67,19 +66,33 @@ def wait_for_code(state: str) -> tuple[http.server.HTTPServer, str, dict]:
     return server, redirect, result
 
 
+def curl(url: str, stdin: str, header_from_stdin: bool = False) -> dict:
+    """HTTPS through curl, which uses the macOS keychain's certificates. (python.org builds of
+    Python often ship without CA certificates, so urllib fails with CERTIFICATE_VERIFY_FAILED.)
+    Secrets travel on stdin, never on the command line where other processes could see them."""
+    cmd = ["curl", "-sS", "--max-time", "60", "-w", "\n%{http_code}"]
+    cmd += ["-H", "@-", url] if header_from_stdin else ["--data-binary", "@-", url]
+    result = subprocess.run(cmd, input=stdin, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise SystemExit(f"Network error calling {url.split('?')[0]}: {result.stderr.strip()}")
+    body, _, status = result.stdout.rpartition("\n")
+    data = json.loads(body) if body.strip() else {}
+    if not status.startswith("2"):
+        detail = data.get("error_description") or data.get("error") or body[:300]
+        raise SystemExit(f"Google returned HTTP {status} from {url.split('?')[0]}: {detail}")
+    return data
+
+
 def exchange(client_id: str, client_secret: str, code: str, redirect: str, verifier: str) -> dict:
-    data = urllib.parse.urlencode({"code": code, "client_id": client_id, "client_secret": client_secret,
+    form = urllib.parse.urlencode({"code": code, "client_id": client_id, "client_secret": client_secret,
                                    "redirect_uri": redirect, "grant_type": "authorization_code",
-                                   "code_verifier": verifier}).encode()
-    with urllib.request.urlopen(urllib.request.Request(TOKEN_URL, data=data), timeout=60) as response:
-        return json.loads(response.read())
+                                   "code_verifier": verifier})
+    return curl(TOKEN_URL, form)
 
 
 def my_channel(access_token: str) -> dict:
     url = "https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true"
-    request = urllib.request.Request(url, headers={"Authorization": f"Bearer {access_token}"})
-    with urllib.request.urlopen(request, timeout=60) as response:
-        items = json.loads(response.read()).get("items", [])
+    items = curl(url, f"Authorization: Bearer {access_token}\n", header_from_stdin=True).get("items", [])
     if not items:
         raise SystemExit("That Google account has no YouTube channel. Sign in again and pick the channel.")
     return items[0]
