@@ -216,17 +216,27 @@ def publish_carousel(post: dict, cfg: dict) -> tuple[str, list[int]]:
     return ig_publish(cfg, carousel), fallbacks
 
 
-COVER_FRAME_MS = 2500  # thumbnail taken from the video when the custom cover is refused
+RUPLOAD = "https://rupload.facebook.com/ig-api-upload"
 
 
 def publish_reel(post: dict, cfg: dict) -> str:
-    base = {"media_type": "REELS", "video_url": f"{folder_url(cfg['video_base'], post)}/reel.mp4",
-            "caption": post["reel_caption"], "share_to_feed": "true"}
-    try:
-        container = ig_create(cfg, {**base, "cover_url": f"{folder_url(cfg['media_base'], post)}/reel_cover.jpg"})
-    except PublishError as err:
-        print(f"  reel with custom cover rejected, retrying with a frame from the video: {err}")
-        container = ig_create(cfg, {**base, "thumb_offset": str(COVER_FRAME_MS)})
+    """Resumable upload: the Action sends reel.mp4's bytes straight to Instagram. Fetching it from
+    a CDN is unreliable for files this size (jsDelivr answers HEAD with 404 until it has cached
+    the file, and Instagram then fails the container with a bare ERROR)."""
+    video = out_dir(post) / "reel.mp4"
+    created, _ = http("POST", f"{cfg['api']}/{cfg['user_id']}/media", {
+        "media_type": "REELS", "upload_type": "resumable", "caption": post["reel_caption"],
+        "share_to_feed": "true", "cover_url": f"{folder_url(cfg['media_base'], post)}/reel_cover.jpg",
+        "access_token": cfg["token"]})
+    container = created["id"]
+    version = cfg["api"].rsplit("/", 1)[-1]
+    upload_uri = created.get("uri") or f"{RUPLOAD}/{version}/{container}"
+    result, _ = http("POST", upload_uri, body=video.read_bytes(), headers={
+        "Authorization": f"OAuth {cfg['token']}", "offset": "0", "file_size": str(video.stat().st_size)})
+    if result.get("success") is False:
+        raise PublishError(f"Reel upload was not accepted: {result}")
+    print(f"  reel uploaded ({video.stat().st_size / 1e6:.1f} MB)")
+    ig_wait(cfg, container)
     return ig_publish(cfg, container)
 
 
