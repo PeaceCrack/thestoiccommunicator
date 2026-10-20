@@ -98,6 +98,18 @@ def my_channel(access_token: str) -> dict:
     return items[0]
 
 
+def require_gh_login() -> None:
+    """Fail before the Google sign-in, not after it, if the GitHub CLI can't save secrets."""
+    try:
+        result = subprocess.run(["gh", "auth", "status"], capture_output=True, text=True)
+    except FileNotFoundError:
+        raise SystemExit("GitHub CLI not found. Run: brew install gh") from None
+    if result.returncode != 0:
+        raise SystemExit("GitHub CLI is not logged in, so the secrets can't be saved. First run:\n"
+                         "  gh auth login --hostname github.com --git-protocol https --web\n"
+                         "then run this script again.")
+
+
 def set_secret(name: str, value: str) -> None:
     result = subprocess.run(["gh", "secret", "set", name], input=value, text=True, capture_output=True)
     if result.returncode != 0:
@@ -111,6 +123,7 @@ def main() -> None:
     parser.add_argument("--expect-channel", default=EXPECTED_CHANNEL)
     args = parser.parse_args()
 
+    require_gh_login()
     client_id, client_secret = read_client(args.client_file)
     state = secrets.token_urlsafe(16)
     verifier = secrets.token_urlsafe(64)
