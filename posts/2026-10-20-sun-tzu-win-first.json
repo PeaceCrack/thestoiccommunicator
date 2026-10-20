@@ -1,0 +1,265 @@
+{
+  "slug": "sun-tzu-win-first",
+  "date": "2026-10-20",
+  "pillar": "think",
+  "philosopher": "Sun Tzu",
+  "topic": "Sun Tzu: win first, then go to war. 3 laws for walking into meetings already decided, with Klein's pre-mortem",
+  "story": {
+    "title": "Sun Tzu drills King Helü's palace women at the court of Wu",
+    "who": "Sun Tzu and King Helü of Wu",
+    "when": "Reign of King Helü of Wu, 514-496 BC (Sima Qian, Shiji 65)"
+  },
+  "quotes": [
+    "Thus it is that in war the victorious strategist only seeks battle after the victory has been won, whereas he who is destined to defeat first fights and afterwards looks for victory.",
+    "To secure ourselves against defeat lies in our own hands, but the opportunity of defeating the enemy is provided by the enemy himself.",
+    "Now the general who wins a battle makes many calculations in his temple ere the battle is fought.",
+    "If words of command are not clear and distinct, if orders are not thoroughly understood, then the general is to blame."
+  ],
+  "facts": [
+    {
+      "claim": "To test Sun Tzu, King Helü of Wu let him drill 180 palace women in two companies. Sun Tzu explained the commands before the drum, the women laughed twice, he had the two company leaders executed, and the next drill was performed with perfect precision",
+      "source": "Sima Qian, Shiji (Records of the Grand Historian) ch. 65, as translated in Lionel Giles, The Art of War (1910), Introduction"
+    },
+    {
+      "claim": "Gary Klein's pre-mortem asks a team to imagine a project has already failed and write down why. Klein cites a 1989 study finding that prospective hindsight increases the ability to correctly identify reasons for future outcomes by 30%",
+      "source": "Gary Klein, Performing a Project Premortem, Harvard Business Review, September 2007; Mitchell, Russo & Pennington, Back to the Future: Temporal Perspective in the Explanation of Events, Journal of Behavioral Decision Making, 1989"
+    }
+  ],
+  "theme": "academy",
+  "palette": "parchment-oxblood",
+  "fonts": "dm-serif",
+  "seed": 69671,
+  "reel_style": {
+    "beats": 8,
+    "mood": "triumphant",
+    "transitions": [
+      "hblur",
+      "squeezev",
+      "wipeleft"
+    ],
+    "motions": [
+      "still",
+      "push",
+      "pull"
+    ],
+    "caption_font": "Impact"
+  },
+  "alt_text": "Oxblood DM Serif lettering on a parchment geometer's grid reads: WIN BEFORE YOU WALK IN. Sun Tzu's 3 laws for meetings.",
+  "search_terms": [
+    "sun tzu art of war",
+    "meeting preparation"
+  ],
+  "slides": [
+    {
+      "kind": "cover",
+      "headline": "WIN BEFORE YOU WALK IN",
+      "body": "Sun Tzu's 3 laws for meetings that are decided before they start.",
+      "animate": true
+    },
+    {
+      "kind": "stake",
+      "kicker": "THE ART OF WAR, CHAPTER 4",
+      "headline": "Do you fight first and hope?",
+      "visual": {
+        "type": "quote",
+        "text": "The victorious strategist only seeks battle after the victory has been won.",
+        "who": "Sun Tzu, The Art of War 4.15 (Giles)"
+      }
+    },
+    {
+      "kind": "stake",
+      "kicker": "COURT OF WU",
+      "headline": "180 women, one drill",
+      "surface": "ink",
+      "visual": {
+        "type": "story",
+        "when": "Wu, c. 500 BC",
+        "text": "King Helü dares Sun Tzu to drill his palace women. Sun Tzu explains every command before the drum. They laugh. He enforces. The next drill is flawless.",
+        "who": "Sima Qian, Shiji 65"
+      }
+    },
+    {
+      "kind": "content",
+      "kicker": "LAW OF CLARITY",
+      "headline": "Make the orders clear first",
+      "body": "Unclear orders are the general's fault. Send the one-page ask before the meeting.",
+      "visual": {
+        "type": "compare",
+        "left": {
+          "title": "WALK IN COLD",
+          "lines": [
+            "Pitch from slide 1",
+            "Room hears it live",
+            "Questions ambush"
+          ]
+        },
+        "right": {
+          "title": "WIN FIRST",
+          "lines": [
+            "Memo sent Monday",
+            "Room arrives briefed",
+            "Objections met early"
+          ]
+        }
+      }
+    },
+    {
+      "kind": "content",
+      "kicker": "LAW OF THE TEMPLE",
+      "headline": "Calculate in the temple",
+      "body": "Gary Klein's pre-mortem (HBR, 2007): assume the plan already failed, then find out why.",
+      "animate": true,
+      "visual": {
+        "type": "steps",
+        "items": [
+          "It is 6 months on. The plan failed.",
+          "Everyone writes why, alone, for 2 minutes",
+          "Fix the top 3 before the meeting"
+        ]
+      }
+    },
+    {
+      "kind": "content",
+      "kicker": "LAW OF DEFENCE",
+      "headline": "Close your gaps, wait for theirs",
+      "body": "Defeat-proofing is in your hands. The opening is given by the other side. Know your walk-away, then listen.",
+      "visual": {
+        "type": "chips",
+        "strike": true,
+        "items": [
+          "Talk first",
+          "Fill every silence",
+          "Win every point"
+        ]
+      }
+    },
+    {
+      "kind": "recap",
+      "headline": "Win first, then walk in",
+      "items": [
+        "Send the clear ask before the meeting",
+        "Run the pre-mortem the day before",
+        "Seal your gaps, let them open theirs"
+      ]
+    },
+    {
+      "kind": "cta",
+      "headline": "SAVE THIS FOR YOUR NEXT MEETING",
+      "body": "Think like Plato. Speak like a leader. Influence like a CEO."
+    }
+  ],
+  "caption": "Why does the same person win every meeting they walk into?\n\nAround 500 BC, King Helü of Wu handed Sun Tzu 180 palace women and asked him to drill them. Sun Tzu explained every command before the drum sounded. When they laughed, he enforced it. The next drill was flawless. Sima Qian records it in the Shiji.\n\nThe Art of War puts it in one line: the victorious strategist only seeks battle after the victory has been won.\n\nFor meeting preparation, that means 3 laws. Make the ask clear before you arrive. Run a pre-mortem, Gary Klein's trick from HBR, the day before. Close your own gaps and let the other side open theirs.\n\nMost people read Sun Tzu Art of War quotes as battle advice. I read them as meeting advice.\n\nSave this before your next big meeting.\n\n#suntzu #leadership #strategy",
+  "reel_caption": "The meeting is decided before anyone sits down. Sun Tzu knew it 2,500 years ago.\n\nSource: Sima Qian, Shiji 65, and The Art of War 4.15. Pre-mortem: Gary Klein, HBR 2007.\n\nSave this before your next big meeting.\n\n#suntzu #leadership #strategy",
+  "youtube": {
+    "title": "Why The Same Person Wins Every Meeting #Shorts",
+    "description": "Sun Tzu drilled 180 palace women and proved one rule: win first, then fight. Sources: Sima Qian, Shiji 65; Sun Tzu, The Art of War 4.15 (Giles); Gary Klein, Performing a Project Premortem, HBR 2007.\n\nThink like Plato. Speak like a leader. Influence like a CEO.\n\n#Shorts #suntzu #leadership",
+    "tags": [
+      "sun tzu",
+      "art of war",
+      "leadership",
+      "meeting preparation",
+      "pre-mortem",
+      "strategy",
+      "philosophy",
+      "influence"
+    ]
+  },
+  "reel": {
+    "beats": [
+      {
+        "kind": "hook",
+        "kicker": "THE ART OF WAR",
+        "headline": "WHY DO THEY WIN EVERY MEETING?",
+        "voice": "Why does the same person win every meeting? It was over before they sat down."
+      },
+      {
+        "kind": "story",
+        "headline": "180 women. One drill.",
+        "visual": {
+          "type": "story",
+          "when": "Court of Wu, c. 500 BC",
+          "text": "King Helü dares Sun Tzu to drill 180 palace women.",
+          "who": "Sima Qian, Shiji 65"
+        },
+        "voice": "A king dares Sun Tzu to drill 180 palace women. First, he explains every command."
+      },
+      {
+        "kind": "story",
+        "headline": "They laughed. Twice.",
+        "surface": "ink",
+        "visual": {
+          "type": "chips",
+          "items": [
+            "Explain",
+            "Explain again",
+            "Enforce"
+          ]
+        },
+        "voice": "They laugh. Twice. So he has the 2 captains executed. The next drill is flawless."
+      },
+      {
+        "kind": "fact",
+        "kicker": "KLEIN, HBR 2007",
+        "headline": "Picture the failure first",
+        "visual": {
+          "type": "stat",
+          "value": 30,
+          "suffix": "%",
+          "label": "better at spotting why plans fail",
+          "note": "Mitchell, Russo & Pennington, 1989"
+        },
+        "voice": "Gary Klein's pre-mortem: imagine your plan already failed. One study found that makes people 30 percent better at naming why."
+      },
+      {
+        "kind": "lesson",
+        "headline": "Fight first, or win first?",
+        "visual": {
+          "type": "compare",
+          "left": {
+            "title": "FIGHT FIRST",
+            "lines": [
+              "Pitch cold",
+              "Get ambushed"
+            ]
+          },
+          "right": {
+            "title": "WIN FIRST",
+            "lines": [
+              "Ask sent",
+              "Gaps closed"
+            ]
+          }
+        },
+        "voice": "The work happens before the room."
+      },
+      {
+        "kind": "quote",
+        "visual": {
+          "type": "quote",
+          "text": "The victorious strategist only seeks battle after the victory has been won.",
+          "who": "Sun Tzu, The Art of War 4.15"
+        },
+        "voice": "Sun Tzu: the victorious strategist only seeks battle after the victory has been won."
+      },
+      {
+        "kind": "takeaway",
+        "headline": "Tonight: run the pre-mortem",
+        "visual": {
+          "type": "steps",
+          "items": [
+            "Write 3 reasons it fails",
+            "Fix them tonight",
+            "Walk in decided"
+          ]
+        },
+        "voice": "Tonight, write 3 reasons your next meeting fails. Fix them. Then walk in already decided."
+      },
+      {
+        "kind": "cta",
+        "headline": "FOLLOW FOR DAILY STOIC POWER",
+        "body": "Think like Plato. Speak like a leader. Influence like a CEO.",
+        "voice": "Follow to think like Plato, speak like a leader, and influence like a CEO."
+      }
+    ]
+  }
+}
