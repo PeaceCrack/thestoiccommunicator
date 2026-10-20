@@ -272,6 +272,13 @@ class PublishTest(unittest.TestCase):
             with self.assertRaises(publish.PublishError):
                 publish.youtube_metadata(EXAMPLE)
 
+    def test_token_is_trimmed_and_reported_safely(self):
+        self.assertEqual(publish.clean_token(' "IGAAabc123"\n'), "IGAAabc123")
+        self.assertEqual(publish.clean_token("Bearer IGAAx"), "IGAAx")
+        report = publish.token_report("IGAAsecretvalue\n")
+        self.assertIn("15 chars (16 before trimming)", report)
+        self.assertNotIn("secretvalue", report)
+
     def test_ig_config_requires_env(self):
         with mock.patch.dict(os.environ, {}, clear=True):
             with self.assertRaises(publish.PublishError):

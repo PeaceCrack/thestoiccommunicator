@@ -146,9 +146,30 @@ def ig_config() -> dict:
     if not base.startswith("https://"):
         raise PublishError("MEDIA_BASE_URL must be a public https URL. Instagram fetches the files itself.")
     host = os.environ.get("GRAPH_HOST", "graph.instagram.com")
-    return {"user_id": os.environ["IG_USER_ID"], "token": os.environ["IG_ACCESS_TOKEN"], "media_base": base,
+    return {"user_id": os.environ["IG_USER_ID"].strip(), "token": clean_token(os.environ["IG_ACCESS_TOKEN"]),
+            "media_base": base,
             "video_base": os.environ.get("VIDEO_BASE_URL", "").rstrip("/") or video_base(base),
             "api": f"https://{host}/{os.environ.get('GRAPH_VERSION', 'v23.0')}"}
+
+
+TOKEN_KINDS = {"IGAA": "Instagram Login token (correct)", "IG": "Instagram token",
+               "EAA": "Facebook token (wrong kind for graph.instagram.com)"}
+
+
+def clean_token(raw: str) -> str:
+    """Strip whitespace, newlines and quotes a paste or `echo | gh secret set` can add."""
+    token = raw.strip().strip('"').strip("'").strip()
+    if token.lower().startswith("bearer "):
+        token = token[7:].strip()
+    return token
+
+
+def token_report(raw: str) -> str:
+    """Safe facts about the token for the log. Never the value itself."""
+    token = clean_token(raw)
+    kind = next((label for prefix, label in TOKEN_KINDS.items() if token.startswith(prefix)), "unknown kind")
+    return (f"token: {len(token)} chars ({len(raw)} before trimming), {kind}, "
+            f"inner whitespace: {any(c.isspace() for c in token)}")
 
 
 def ig_wait(cfg: dict, container: str) -> None:
@@ -280,6 +301,8 @@ def publish_all(post: dict, todo: list[str]) -> list[str]:
                 record(post["slug"], platform, media_id, {"youtube_privacy": privacy})
             print(f"POSTED {platform}: {media_id}")
         except PublishError as err:
+            if "code\":190" in str(err).replace(" ", ""):
+                print("  " + token_report(os.environ.get("IG_ACCESS_TOKEN", "")), file=sys.stderr)
             errors.append(f"{platform}: {err}")
             print(f"FAILED {platform}: {err}", file=sys.stderr)
     return errors
