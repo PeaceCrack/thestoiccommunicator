@@ -216,27 +216,41 @@ def publish_carousel(post: dict, cfg: dict) -> tuple[str, list[int]]:
     return ig_publish(cfg, carousel), fallbacks
 
 
-RUPLOAD = "https://rupload.facebook.com/ig-api-upload"
+WARM_ATTEMPTS = 12
+WARM_INTERVAL_S = 10
+REEL_RETRY_WAIT_S = 30
+
+
+def warm_cdn(url: str, size: int) -> None:
+    """jsDelivr answers HEAD with 404 for a large file until it has cached it, and Instagram then
+    fails the Reel container with a bare ERROR. Download it once, then wait for HEAD to say 200
+    with the right length before handing the URL to Instagram."""
+    for attempt in range(WARM_ATTEMPTS):
+        try:
+            with urllib.request.urlopen(url, timeout=HTTP_TIMEOUT_S) as response:
+                response.read()
+            head = urllib.request.Request(url, method="HEAD")
+            with urllib.request.urlopen(head, timeout=60) as response:
+                if response.status == 200 and int(response.headers.get("Content-Length", 0)) == size:
+                    print(f"  CDN ready after {attempt + 1} check(s)")
+                    return
+        except urllib.error.URLError:
+            pass
+        time.sleep(WARM_INTERVAL_S)
+    raise PublishError(f"CDN never served {url} correctly (HEAD 200 with {size} bytes)")
 
 
 def publish_reel(post: dict, cfg: dict) -> str:
-    """Resumable upload: the Action sends reel.mp4's bytes straight to Instagram. Fetching it from
-    a CDN is unreliable for files this size (jsDelivr answers HEAD with 404 until it has cached
-    the file, and Instagram then fails the container with a bare ERROR)."""
-    video = out_dir(post) / "reel.mp4"
-    created, _ = http("POST", f"{cfg['api']}/{cfg['user_id']}/media", {
-        "media_type": "REELS", "upload_type": "resumable", "caption": post["reel_caption"],
-        "share_to_feed": "true", "cover_url": f"{folder_url(cfg['media_base'], post)}/reel_cover.jpg",
-        "access_token": cfg["token"]})
-    container = created["id"]
-    version = cfg["api"].rsplit("/", 1)[-1]
-    upload_uri = created.get("uri") or f"{RUPLOAD}/{version}/{container}"
-    result, _ = http("POST", upload_uri, body=video.read_bytes(), headers={
-        "Authorization": f"OAuth {cfg['token']}", "offset": "0", "file_size": str(video.stat().st_size)})
-    if result.get("success") is False:
-        raise PublishError(f"Reel upload was not accepted: {result}")
-    print(f"  reel uploaded ({video.stat().st_size / 1e6:.1f} MB)")
-    ig_wait(cfg, container)
+    video_url = f"{folder_url(cfg['video_base'], post)}/reel.mp4"
+    warm_cdn(video_url, (out_dir(post) / "reel.mp4").stat().st_size)
+    params = {"media_type": "REELS", "video_url": video_url, "caption": post["reel_caption"],
+              "share_to_feed": "true", "cover_url": f"{folder_url(cfg['media_base'], post)}/reel_cover.jpg"}
+    try:
+        container = ig_create(cfg, params)
+    except PublishError as err:
+        print(f"  reel container failed, retrying once in {REEL_RETRY_WAIT_S}s: {err}")
+        time.sleep(REEL_RETRY_WAIT_S)
+        container = ig_create(cfg, params)
     return ig_publish(cfg, container)
 
 
