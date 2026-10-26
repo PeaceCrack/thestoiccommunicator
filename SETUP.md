@@ -202,6 +202,28 @@ You should see `IG_USER_ID`, `IG_ACCESS_TOKEN`, `YT_CLIENT_ID`, `YT_CLIENT_SECRE
 
 ---
 
+## Part 5b. Free stock video: Pexels key (5 min, optional but recommended)
+
+Reels mix public-domain art (no key needed) with real stock footage from Pexels. Without a key,
+video shots fall back to art.
+
+1. Sign up free at **https://www.pexels.com/join** and open **https://www.pexels.com/api/new**.
+2. Fill in the short form (project: "The Stoic Communicator reels") and copy your API key.
+3. Store it in the macOS keychain. It prompts for the key with hidden input, and it never goes in
+   a file, the chat, or GitHub (footage is fetched on this Mac before rendering):
+
+```bash
+security add-generic-password -a "$USER" -s pexels-api-key -w
+```
+
+To check it's there without printing it:
+
+```bash
+security find-generic-password -s pexels-api-key >/dev/null && echo "Pexels key saved"
+```
+
+---
+
 ## Part 6. Every post
 
 In Claude Code, in this folder: `/stoic-communicator-post`.

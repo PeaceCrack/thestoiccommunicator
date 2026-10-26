@@ -11,7 +11,8 @@ brand.json                 name, handle, motto, logo, narrator voice
 creative_brief.py          rolls theme, palette, fonts, music mood, transitions, story format, hook, wildcard
 history.py                 every past topic, story, quote and look; validate.py refuses repeats
 render.py                  carousel renderer, kept for manual use; not part of posting
-render_reel.py             reel → out/<slug>/reel.mp4 + reel_cover.jpg (voice, score, captions, transitions)
+fetch_media.py             finds each shot's public-domain art (Wikimedia, The Met) or Pexels video
+render_reel.py             reel → out/<slug>/reel.mp4 + reel_cover.jpg (footage, hard cuts, voice, score, captions)
 publish.py                 posts the Reel and the Short (dry run by default), records each in published.json
 watch_run.py               waits for the GitHub run after a push and reports each platform
 youtube_auth.py            one-time Google sign-in that stores the YouTube secrets in GitHub

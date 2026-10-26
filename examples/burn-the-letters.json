@@ -19,17 +19,15 @@
   "fonts": "cinzel",
   "seed": 4127,
   "reel_style": {
+    "beats": 11,
     "mood": "epic",
-    "transitions": [
-      "fadeblack",
-      "smoothup",
-      "circleopen",
-      "hblur"
-    ],
-    "motions": [
+    "takeaway_transition": "fadewhite",
+    "grade": "warm-film",
+    "camera_moves": [
       "push",
-      "pull",
-      "still"
+      "pan-left",
+      "tilt-down",
+      "pull"
     ],
     "caption_style": "single",
     "caption_font": "Georgia"
@@ -174,64 +172,112 @@
         "kind": "hook",
         "kicker": "ROME, 175 AD",
         "headline": "HE BURNED THE EVIDENCE",
-        "voice": "He held the names of every traitor in Rome. And he burned them.",
+        "media": {
+          "type": "art",
+          "query": "Marcus Aurelius equestrian statue",
+          "source": "any",
+          "file": "out/example-burn-the-letters/media/01.jpg",
+          "credit": "File:Marcus Aurelius Capitoline Hill September 2015-1.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Marcus_Aurelius_Capitoline_Hill_September_2015-1.jpg"
+        },
+        "voice": "He held the name of every traitor in Rome. And he burned them.",
         "emphasis": "burned"
       },
       {
         "kind": "story",
-        "headline": "A general takes the throne",
-        "visual": {
-          "type": "emblem",
-          "icon": "sword",
-          "label": "Avidius Cassius"
+        "media": {
+          "type": "art",
+          "query": "Roman soldiers relief Trajan column",
+          "source": "wikimedia",
+          "file": "out/example-burn-the-letters/media/02.jpg",
+          "credit": "File:Trajan's Column - NMR - panel 057 A.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Trajan%27s_Column_-_NMR_-_panel_057_A.jpg"
         },
-        "voice": "Syria. A false rumour says the emperor is dead. His best general, Avidius Cassius, declares himself emperor."
+        "voice": "175 AD. Rome's best general hears the emperor is dead."
+      },
+      {
+        "kind": "story",
+        "media": {
+          "type": "art",
+          "query": "Augustus of Prima Porta statue",
+          "source": "wikimedia",
+          "file": "out/example-burn-the-letters/media/03.jpg",
+          "credit": "File:Statue-Augustus.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Statue-Augustus.jpg"
+        },
+        "voice": "So Avidius Cassius does the unthinkable. He crowns himself."
       },
       {
         "kind": "story",
         "headline": "But Marcus was alive",
-        "visual": {
-          "type": "emblem",
-          "icon": "crown",
-          "label": "Marcus Aurelius"
+        "media": {
+          "type": "art",
+          "query": "Marcus Aurelius bust",
+          "source": "wikimedia",
+          "file": "out/example-burn-the-letters/media/04.jpg",
+          "credit": "File:Head Marcus Aurelius archmus Heraklion.jpg (Wikimedia Commons)",
+          "license": "CC0",
+          "page": "https://commons.wikimedia.org/wiki/File:Head_Marcus_Aurelius_archmus_Heraklion.jpg"
         },
-        "voice": "But Marcus Aurelius was alive. Within months, Cassius was dead, killed by his own officers.",
+        "voice": "One problem. Marcus Aurelius is alive.",
         "emphasis": "alive"
       },
       {
-        "kind": "turn",
-        "headline": "A chest of letters arrives",
-        "visual": {
-          "type": "emblem",
-          "icon": "scroll",
-          "label": "Every name inside"
+        "kind": "story",
+        "media": {
+          "type": "art",
+          "query": "Death of Caesar",
+          "title": "File:Jean-Léon Gérôme - The Death of Caesar - Walters 37884.jpg",
+          "file": "out/example-burn-the-letters/media/05.jpg",
+          "credit": "File:Jean-Léon Gérôme - The Death of Caesar - Walters 37884.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Jean-L%C3%A9on_G%C3%A9r%C3%B4me_-_The_Death_of_Caesar_-_Walters_37884.jpg"
         },
-        "voice": "Then a chest arrives. The rebel's letters. Inside, every senator who backed him."
+        "voice": "Within 3 months, Cassius is dead. Killed by his own officers."
       },
       {
         "kind": "turn",
-        "headline": "He never opened them",
-        "visual": {
-          "type": "compare",
-          "left": {
-            "title": "ANY EMPEROR",
-            "lines": [
-              "Read",
-              "Purge",
-              "Rule by fear"
-            ]
-          },
-          "right": {
-            "title": "MARCUS",
-            "lines": [
-              "Burn",
-              "Forgive",
-              "Keep them loyal"
-            ]
-          }
+        "media": {
+          "type": "art",
+          "query": "Roman fresco scroll Pompeii",
+          "source": "wikimedia",
+          "file": "out/example-burn-the-letters/media/06.jpg",
+          "credit": "File:Roman Fresco showing a young man with a scroll labelled \"Plato\", from House of the Apartment, Pompeii (48452294242).jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Roman_Fresco_showing_a_young_man_with_a_scroll_labelled_%22Plato%22,_from_House_of_the_Apartment,_Pompeii_(48452294242).jpg"
         },
-        "voice": "Any emperor would read them and start the purge. Marcus burned them without reading a line.",
-        "emphasis": "burned"
+        "voice": "Then a chest arrives. The rebel's letters. Every senator who backed him, named."
+      },
+      {
+        "kind": "story",
+        "media": {
+          "type": "art",
+          "query": "Roman senate painting",
+          "source": "any",
+          "file": "out/example-burn-the-letters/media/07.jpg",
+          "credit": "File:Ernest Joseph Bailly - The Vestal Virgins Handing over the Testament of Emperor Augustus to the Roman Senate - 2005-O - Museum of Fine Arts Ghent (MSK).jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Ernest_Joseph_Bailly_-_The_Vestal_Virgins_Handing_over_the_Testament_of_Emperor_Augustus_to_the_Roman_Senate_-_2005-O_-_Museum_of_Fine_Arts_Ghent_(MSK).jpg"
+        },
+        "voice": "One look, and Marcus could purge the whole Senate."
+      },
+      {
+        "kind": "turn",
+        "headline": "He never read a line",
+        "media": {
+          "type": "art",
+          "query": "burning city",
+          "title": "File:Cole Thomas The Course of Empire Destruction 1836.jpg",
+          "file": "out/example-burn-the-letters/media/08.jpg",
+          "credit": "File:Cole Thomas The Course of Empire Destruction 1836.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Cole_Thomas_The_Course_of_Empire_Destruction_1836.jpg"
+        },
+        "voice": "He throws the letters into the fire. Unread.",
+        "emphasis": "fire"
       },
       {
         "kind": "quote",
@@ -245,7 +291,12 @@
       {
         "kind": "lesson",
         "headline": "Drop the grudge, keep the room",
-        "voice": "So next time someone crosses you, don't keep the file. Keep the room.",
+        "visual": {
+          "type": "emblem",
+          "icon": "handshake",
+          "label": "Keep the room"
+        },
+        "voice": "So when someone crosses you, don't keep the file. Keep the room.",
         "emphasis": "room"
       },
       {
@@ -257,5 +308,15 @@
     ]
   },
   "mental_model": "Cognitive Reframing",
-  "takeaway": "Power you choose not to use still lands: drop the grudge and keep the room."
+  "takeaway": "Power you choose not to use still lands: drop the grudge and keep the room.",
+  "credits": [
+    "File:Marcus Aurelius Capitoline Hill September 2015-1.jpg (Wikimedia Commons)",
+    "File:Trajan's Column - NMR - panel 057 A.jpg (Wikimedia Commons)",
+    "File:Statue-Augustus.jpg (Wikimedia Commons)",
+    "File:Head Marcus Aurelius archmus Heraklion.jpg (Wikimedia Commons)",
+    "File:Jean-Léon Gérôme - The Death of Caesar - Walters 37884.jpg (Wikimedia Commons)",
+    "File:Roman Fresco showing a young man with a scroll labelled \"Plato\", from House of the Apartment, Pompeii (48452294242).jpg (Wikimedia Commons)",
+    "File:Ernest Joseph Bailly - The Vestal Virgins Handing over the Testament of Emperor Augustus to the Roman Senate - 2005-O - Museum of Fine Arts Ghent (MSK).jpg (Wikimedia Commons)",
+    "File:Cole Thomas The Course of Empire Destruction 1836.jpg (Wikimedia Commons)"
+  ]
 }

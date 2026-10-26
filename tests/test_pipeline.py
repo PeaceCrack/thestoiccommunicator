@@ -17,9 +17,9 @@ import creative_brief  # noqa: E402
 import history  # noqa: E402
 import publish  # noqa: E402
 from media.captions import CAPTION_STYLES, Timed, ass_color, build_ass, phrases, punctuate, shift  # noqa: E402
-from media import sfx  # noqa: E402
+from media import footage, sfx  # noqa: E402
 from media.voice import Narration, Word  # noqa: E402
-from render_reel import XFADE_S, timeline, total_length  # noqa: E402
+from render_reel import XFADE_S, timeline, total_length, transition_flags  # noqa: E402
 from slides.art import GENERATORS, art_layer  # noqa: E402
 from slides.compose import fonts_query, render_slide  # noqa: E402
 from slides.reel_frame import render_frames  # noqa: E402
@@ -146,10 +146,22 @@ class OneStoryTest(EmptyHistory):
 
     def test_needs_one_lesson_and_a_told_story(self):
         post = copy.deepcopy(EXAMPLE)
-        post["reel"]["beats"] = [b for b in post["reel"]["beats"] if b["kind"] not in ("lesson", "turn")]
+        post["reel"]["beats"] = [b for b in post["reel"]["beats"] if b["kind"] not in ("lesson", "turn", "story")]
         errors = validate_reel(post)
         self.assertTrue(any("exactly 1, the one takeaway" in e for e in errors))
-        self.assertTrue(any("at least 3 story/turn beats" in e for e in errors))
+        self.assertTrue(any("story/turn beats" in e for e in errors))
+
+    def test_scene_shots_need_real_media(self):
+        post = copy.deepcopy(EXAMPLE)
+        for beat in post["reel"]["beats"]:
+            beat.pop("media", None)
+        self.assertTrue(any("use real media" in e for e in validate_reel(post)))
+
+    def test_only_free_licences_are_accepted(self):
+        self.assertTrue(footage._free("Public domain"))
+        self.assertTrue(footage._free("CC0"))
+        self.assertFalse(footage._free("CC BY-SA 4.0"))
+        self.assertFalse(footage._free("CC BY 2.0"))
 
     def test_needs_takeaway_and_story_source(self):
         post = copy.deepcopy(EXAMPLE)
@@ -250,14 +262,18 @@ class CaptionsTest(unittest.TestCase):
 
 
 class TimelineTest(unittest.TestCase):
-    def test_beats_overlap_by_the_transition(self):
-        narrations = [Narration(Path("a"), d, ()) for d in (2.0, 3.0, 1.5)]
-        slots = timeline(narrations)
+    def test_hard_cuts_except_into_the_takeaway(self):
+        narrations = [Narration(Path("a"), d, ()) for d in (2.0, 3.0, 1.5, 2.5)]
+        beats = [{"kind": k} for k in ("hook", "story", "lesson", "cta")]
+        fades = transition_flags(beats)
+        self.assertEqual(fades, [False, False, True, False])
+        slots = timeline(narrations, fades)
+        self.assertAlmostEqual(slots[1].start, slots[0].start + slots[0].length)          # hard cut
+        self.assertAlmostEqual(slots[2].start, slots[1].start + slots[1].length - XFADE_S)  # transition
+        self.assertAlmostEqual(slots[3].start, slots[2].start + slots[2].length)          # hard cut
+        self.assertAlmostEqual(total_length(slots), sum(s.length for s in slots) - XFADE_S)
         for prev, nxt in zip(slots, slots[1:]):
-            self.assertAlmostEqual(nxt.start, prev.start + prev.length - XFADE_S)
-            self.assertGreater(nxt.voice_at, nxt.start)
-            self.assertGreaterEqual(nxt.voice_at, prev.voice_at + 2.0)
-        self.assertAlmostEqual(total_length(slots), sum(s.length for s in slots) - 2 * XFADE_S)
+            self.assertGreaterEqual(nxt.voice_at, prev.voice_at + 1.5)
 
 
 class BriefTest(EmptyHistory):

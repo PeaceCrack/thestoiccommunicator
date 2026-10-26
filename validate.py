@@ -126,11 +126,13 @@ PILLARS = ("think", "speak", "influence")
 # One story, one takeaway: the hook opens it, story/turn beats tell it (the turn is the twist or
 # climax), at most one quote is the thinker's line, ONE lesson is the takeaway, the cta closes.
 BEAT_KINDS = {"hook", "story", "turn", "quote", "lesson", "cta"}
-MIN_STORY_BEATS = 3
+MIN_STORY_BEATS = 5
+MIN_MEDIA_SHARE_X10 = 7   # 70% of scene shots must be real footage or art
+MEDIA_TYPES = ("art", "video")
 MAX_FACTS = 1
-MIN_BEATS, MAX_BEATS = 6, 14
-BEAT_MAX_WORDS = 34
-REEL_MIN_WORDS, REEL_MAX_WORDS = 60, 125   # about 28-58 s of narration
+MIN_BEATS, MAX_BEATS = 10, 18   # a fuller storyboard of short shots, hard-cut like a film
+BEAT_MAX_WORDS = 24
+REEL_MIN_WORDS, REEL_MAX_WORDS = 80, 135   # about 35-58 s of narration
 REEL_HEADLINE_MAX_WORDS = 7
 YT_TITLE_MAX = 100
 YT_DESC_MAX = 5000
@@ -154,6 +156,15 @@ def validate_reel(post: dict) -> list[str]:
         errors.append(f"{kinds.count('lesson')} lesson beats: exactly 1, the one takeaway")
     if kinds.count("quote") > 1:
         errors.append("at most 1 quote beat")
+    scenes = [b for b in beats if b.get("kind") in ("hook", "story", "turn")]
+    with_media = sum(1 for b in scenes if b.get("media"))
+    if scenes and with_media * 10 < len(scenes) * MIN_MEDIA_SHARE_X10:
+        errors.append(f"only {with_media} of {len(scenes)} hook/story/turn shots use real media, want at least "
+                      f"{MIN_MEDIA_SHARE_X10 * 10}%: give them a \"media\" image or video")
+    for index, beat in enumerate(beats, start=1):
+        spec = beat.get("media")
+        if spec and (spec.get("type") not in MEDIA_TYPES or not str(spec.get("query", "")).strip()):
+            errors.append(f"beat {index}: media needs type 'art' or 'video' and a search query")
     total = 0
     for index, beat in enumerate(beats, start=1):
         label = f"beat {index}"
@@ -174,7 +185,7 @@ def validate_reel(post: dict) -> list[str]:
         if "—" in beat.get("voice", "") + beat.get("headline", ""):
             errors.append(f"{label}: no em dashes")
     if beats and not REEL_MIN_WORDS <= total <= REEL_MAX_WORDS:
-        errors.append(f"reel narration is {total} words, want {REEL_MIN_WORDS}-{REEL_MAX_WORDS} (30-58 s)")
+        errors.append(f"reel narration is {total} words, want {REEL_MIN_WORDS}-{REEL_MAX_WORDS} (35-58 s)")
     caption = post.get("reel_caption", "")
     if not caption:
         errors.append("reel_caption is empty")

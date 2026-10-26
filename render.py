@@ -39,8 +39,9 @@ CHROME_CANDIDATES = (
 )
 
 
-def chrome_flags(height: int = HEIGHT) -> list[str]:
-    return ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
+def chrome_flags(height: int = HEIGHT, transparent: bool = False) -> list[str]:
+    alpha = ["--default-background-color=00000000"] if transparent else []
+    return [*alpha, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
             f"--user-data-dir={CHROME_PROFILE}", "--no-first-run", f"--timeout={PAGE_TIMEOUT_MS}",
             f"--window-size={WIDTH},{height}", f"--virtual-time-budget={FONT_WAIT_MS}"]
 
@@ -134,8 +135,8 @@ def run_ffmpeg(args: list[str]) -> None:
         raise SystemExit(f"ffmpeg failed:\n{result.stderr[-800:]}")
 
 
-def screenshot(chrome: str, page: Path, png: Path, height: int = HEIGHT) -> None:
-    cmd = [chrome, *chrome_flags(height), f"--screenshot={png}", page.as_uri()]
+def screenshot(chrome: str, page: Path, png: Path, height: int = HEIGHT, transparent: bool = False) -> None:
+    cmd = [chrome, *chrome_flags(height, transparent), f"--screenshot={png}", page.as_uri()]
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=CHROME_TIMEOUT_S)
     if result.returncode != 0 or not png.exists():
         raise SystemExit(f"Chrome failed on {page.name}:\n{result.stderr[-800:]}")

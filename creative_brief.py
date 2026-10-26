@@ -17,6 +17,7 @@ from pathlib import Path
 from history import all_posts
 from media.captions import CAPTION_STYLES, STYLE_FONTS
 from media.music import MOODS
+from media.shots import GRADES, MOVES
 from render_reel import TRANSITIONS
 from slides.theme import FONT_PAIRS, PALETTES, THEMES
 from slides.visuals import VISUALS
@@ -60,7 +61,7 @@ WILDCARDS = [
     "End the reel with a one-line challenge the viewer can try in their next conversation today.",
     "Use a `timeline` visual to show the story across years or a single tense day.",
 ]
-BEAT_COUNTS = [7, 8, 8, 9, 9, 10, 11]
+BEAT_COUNTS = [11, 12, 12, 13, 13, 14, 15]
 FEATURED = 2
 # Graphics that serve a story. Data charts (bars, donut, stat) invite fact-stacking, so they're out.
 STORY_VISUALS = ("emblem", "story", "quote", "timeline", "compare", "icons", "chips", "flow", "checklist")
@@ -117,8 +118,9 @@ def roll(rng: random.Random) -> dict:
         "reel_style": {
             "beats": rng.choice(BEAT_COUNTS),
             "mood": rng.choice([m for m in MOODS if m not in avoid_mood]),
-            "transitions": rng.sample(TRANSITIONS, rng.randint(3, 5)),
-            "motions": rng.sample(["push", "pull", "still"], rng.randint(2, 3)),
+            "takeaway_transition": rng.choice(TRANSITIONS),
+            "grade": rng.choice(list(GRADES)),
+            "camera_moves": rng.sample(MOVES, rng.randint(3, 5)),
             "caption_style": caption_style,
             "caption_font": rng.choice(STYLE_FONTS[caption_style]),
         },

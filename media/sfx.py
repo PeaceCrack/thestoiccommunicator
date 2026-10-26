@@ -78,13 +78,14 @@ def make(kind: str, rng: random.Random, out: Path) -> Path:
     raise ValueError(f"unknown sfx kind {kind!r}")
 
 
-def plan_cuts(cut_times: list[float], punch_times: list[float], rng: random.Random, work: Path) -> list[Cue]:
+def plan_cuts(cut_times: list[float], punch_times: list[float], rng: random.Random, work: Path,
+              silent_chance: float = SILENT_CUT_CHANCE) -> list[Cue]:
     """Pick a sound for the hook, each cut and each punch-in, all different from their neighbours."""
     work.mkdir(parents=True, exist_ok=True)
     cues = [Cue(0.0, make(rng.choice(HIT_KINDS[:2]), rng, work / "hit.wav"), rng.uniform(0.6, 0.85))]
     last = None
     for k, at in enumerate(cut_times):
-        if rng.random() < SILENT_CUT_CHANCE:
+        if rng.random() < silent_chance:
             last = None
             continue
         kind = rng.choice([c for c in CUT_KINDS if c != last])

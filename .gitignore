@@ -14,3 +14,5 @@ client_secret*.json
 .chrome-cache/
 out/*/review/
 voice-samples/
+out/*/media/
+out/*/review/media_thumbs/

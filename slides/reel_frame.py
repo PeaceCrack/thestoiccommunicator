@@ -30,6 +30,15 @@ body { -webkit-font-smoothing: antialiased; }
 .art-svg { width: 100%; height: 100%; }
 .shade { position: absolute; left: 0; right: 0; bottom: 0; height: 760px; z-index: 0;
   background: linear-gradient(to top, rgba(0,0,0,.55), transparent); }
+html.media, html.media body { background: transparent; }
+.on-media { background: transparent; }
+.on-media .scrim { position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,0) 52%, rgba(0,0,0,.72) 100%); }
+.on-media h1, .on-media h2, .on-media .kicker, .on-media .body { text-shadow: 0 4px 24px rgba(0,0,0,.65); }
+.on-media .body { color: rgba(255,255,255,.9); }
+.on-media .g { background: none; -webkit-text-fill-color: currentColor; color: var(--accent); }
+.mark { position: absolute; z-index: 2; left: 80px; top: 176px; width: 76px; height: 76px; border-radius: 50%;
+  opacity: .9; box-shadow: 0 6px 20px rgba(0,0,0,.4); }
 .outro-logo { width: 360px; height: 360px; border-radius: 50%; align-self: center;
   box-shadow: 0 30px 80px rgba(0,0,0,.45); }
 .brand { position: absolute; z-index: 2; left: 90px; top: 186px; display: flex; align-items: center; gap: 14px;
@@ -111,7 +120,18 @@ def _copy(beat: dict, brand: dict) -> str:
     return "".join(parts)
 
 
+def media_section(beat: dict, brand: dict, plan: dict, t: float) -> str:
+    """Transparent overlay for a shot over real footage: scrim, watermark, copy. No slide chrome."""
+    style = surface_css("night", brand["colors"]) + f"--t:{t:.3f};"
+    logo = escape(brand["logo"].rsplit("/", 1)[-1])
+    return (f'<section class="frame on-media l-{plan["layout"]} beat-{beat["kind"]}" style="{style}">'
+            f'<div class="scrim"></div><img class="mark" src="{logo}" alt="">'
+            f'<div class="card">{_copy(beat, brand)}</div></section>')
+
+
 def frame_section(beat: dict, brand: dict, plan: dict, progress: float, t: float) -> str:
+    if beat.get("media"):
+        return media_section(beat, brand, plan, t)
     classes = f'frame l-{plan["layout"]} {plan["surface"]}-surface beat-{beat["kind"]}'
     style = surface_css(plan["surface"], brand["colors"]) + f"--t:{t:.3f};"
     logo = escape(brand["logo"].rsplit("/", 1)[-1])
@@ -127,6 +147,7 @@ def render_frames(beat: dict, brand: dict, theme: str, seed: int, index: int, pr
     """One HTML page stacking one copy of the beat per frame time."""
     plan = plan_beat(beat, theme, seed, index)
     sections = "".join(frame_section(beat, brand, plan, progress, t) for t in times)
-    return (f'<!doctype html><html><head><meta charset="utf-8">{font_link(brand)}'
+    html_class = ' class="media"' if beat.get("media") else ""
+    return (f'<!doctype html><html{html_class}><head><meta charset="utf-8">{font_link(brand)}'
             f'<style>{CSS}{VISUAL_CSS}{MOTION_CSS}{font_css(brand)}</style></head>'
             f'<body>{sections}{OVERFLOW_PROBE if probe else ""}</body></html>')
