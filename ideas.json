@@ -1,0 +1,23 @@
+{
+  "_about": "Mental-model topic bank (from the user's reference reels, 2026-10-26). creative_brief.py suggests the least-used ones. Each reel tells ONE story that teaches ONE of these, with one takeaway.",
+  "mental_models": [
+    {"name": "Compound Effect", "idea": "Small actions, repeated daily, grow into massive results."},
+    {"name": "Opportunity Cost", "idea": "Every choice costs you the best option you gave up."},
+    {"name": "Lifestyle Creep", "idea": "Spending quietly rises with every raise you earn."},
+    {"name": "Second-Order Thinking", "idea": "Ask what happens after what happens next."},
+    {"name": "First Principles", "idea": "Break a problem down to basic truths, then rebuild."},
+    {"name": "Imposter Syndrome", "idea": "Feeling like a fraud despite real achievements."},
+    {"name": "Inversion Principle", "idea": "Solve problems backwards: avoid what guarantees failure."},
+    {"name": "Loss Aversion", "idea": "Losing hurts roughly twice as much as winning feels good."},
+    {"name": "Status Signaling", "idea": "Buying visible symbols to show rank, not for value."},
+    {"name": "Parkinson's Law of Money", "idea": "Spending expands to fill whatever income you have."},
+    {"name": "Delayed Gratification", "idea": "Give up a small reward now for a bigger one later."},
+    {"name": "Cognitive Reframing", "idea": "Same situation, new meaning: change the story you tell."},
+    {"name": "Locus of Control", "idea": "Do you believe outcomes come from you, or from luck?"},
+    {"name": "Mental Clarity Deficit", "idea": "When overload and poor rest leave your thinking foggy."},
+    {"name": "Asymmetric Upside", "idea": "Small, capped downside. Huge, open-ended gain."},
+    {"name": "The Zero-Sum Game", "idea": "One side's gain is exactly the other side's loss."},
+    {"name": "Signal vs. Noise", "idea": "Separate what matters from what is just loud."},
+    {"name": "The Law of Diminishing Returns", "idea": "Each extra unit of effort adds less than the last."}
+  ]
+}

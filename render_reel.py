@@ -6,7 +6,8 @@
 Writes out/<slug>/reel.mp4 (the Instagram Reel and the YouTube Short) and reel_cover.jpg.
 Each beat: entrance animation frames from headless Chrome, held under a slow push or pull,
 joined to the next beat with an xfade transition. Audio: one narration clip per beat, the
-score ducked under the voice, a boom on the hook and a whoosh on every cut.
+score ducked under the voice, and randomized sound design: a hit on the hook, a different sound
+(or none) on each cut, and a thud or tick under each punch-in zoom.
 """
 
 import argparse
@@ -17,8 +18,9 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from media.captions import CAPTION_FONTS, build_ass, punctuate, shift
-from media.music import boom, score, whoosh
+from media.captions import CAPTION_FONTS, CAPTION_STYLES, build_ass, punctuate, shift
+from media.music import score
+from media.sfx import plan_cuts
 from media.voice import Narration, duration, narrate
 from render import find_chrome, load_json, overflow, run_ffmpeg, screenshot, to_jpeg
 from slides.motion import T_STILL
@@ -35,6 +37,10 @@ LEAD_S, PAD_S, TAIL_S = 0.12, 0.30, 1.4
 XFADE_S = 0.4
 VOICE_IN_S = XFADE_S * 0.6   # a beat's line starts once its card is mostly in
 ZOOM = 0.035
+PUNCH = 0.075             # punch-in zoom on an emphasised word
+PUNCH_S = 0.12           # how fast the punch lands
+PUNCH_CHANCE = 0.3       # beats without an explicit emphasis word get a punch this often
+PUNCH_MIN_LETTERS = 6
 MAX_SECONDS = 59.0            # keep Shorts and Reels under a minute
 MAX_BYTES = 19 * 1024 * 1024  # jsDelivr serves files up to 20 MB, and Instagram fetches the reel there
 BITRATES_K = (2800, 2100, 1500)
@@ -91,24 +97,40 @@ def beat_frames(chrome: str, beat: dict, brand: dict, post: dict, index: int, sl
     return frames
 
 
-def beat_clip(frames: list[Path], slot: Slot, motion: str, out: Path) -> Path:
+def punch_time(beat: dict, narration: Narration, rng: random.Random) -> float | None:
+    """Seconds into the beat's narration of the word to punch in on, or None for no punch."""
+    if beat["kind"] == "cta":
+        return None  # the outro holds still on the logo
+    wanted = (beat.get("emphasis") or "").lower().strip(".,!?;:")
+    if wanted:
+        return next((w.start for w in narration.words if w.text.lower().strip(".,!?;:") == wanted), None)
+    long_words = [w for w in narration.words if len(w.text) >= PUNCH_MIN_LETTERS]
+    if long_words and rng.random() < PUNCH_CHANCE:
+        return rng.choice(long_words).start
+    return None
+
+
+def beat_clip(frames: list[Path], slot: Slot, motion: str, punch_at: float | None, out: Path) -> Path:
+    """punch_at: clip-local seconds where a quick zoom-in lands and holds, or None."""
     listing = out.with_suffix(".txt")
     hold = max(1 / FPS, slot.length - (len(frames) - 1) / FPS)
     lines = [f"file '{f.name}'\nduration {1 / FPS:.5f}\n" for f in frames[:-1]]
     lines.append(f"file '{frames[-1].name}'\nduration {hold:.5f}\nfile '{frames[-1].name}'\n")
     listing.write_text("".join(lines), encoding="utf-8")
     z0, dz = {"push": (0.0, ZOOM), "pull": (ZOOM, -ZOOM), "still": (0.0, 0.0)}[motion]
-    scale = f"trunc({WIDTH}*(1+{z0}+{dz}*t/{slot.length:.3f})/2)*2"
+    punch = f"+{PUNCH}*clip((t-{punch_at:.3f})/{PUNCH_S},0,1)" if punch_at is not None else ""
+    scale = f"trunc({WIDTH}*(1+{z0}+{dz}*t/{slot.length:.3f}{punch})/2)*2"
     run_ffmpeg(["-f", "concat", "-safe", "0", "-i", str(listing),
                 "-vf", f"fps={FPS},scale=w='{scale}':h=-2:eval=frame:flags=lanczos,crop={WIDTH}:{HEIGHT},format=yuv420p",
                 "-t", f"{slot.length:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "12", str(out)])
     return out
 
 
-def mix_audio(narrations: list[Narration], slots: list[Slot], mood: str, seed: int, work: Path) -> Path:
+def mix_audio(narrations: list[Narration], slots: list[Slot], mood: str, seed: int, punches: list[float],
+              work: Path) -> Path:
     length = total_length(slots)
     bed = score(mood, seed, length, work / "score.wav")
-    hit, swoosh = boom(work / "boom.wav"), whoosh(work / "whoosh.wav")
+    cues = plan_cuts([s.start for s in slots[1:]], punches, random.Random(seed + 1), work / "sfx")
     inputs, chains = [], []
     for i, (n, slot) in enumerate(zip(narrations, slots)):
         inputs += ["-i", str(n.wav)]
@@ -118,15 +140,14 @@ def mix_audio(narrations: list[Narration], slots: list[Slot], mood: str, seed: i
     voices = "".join(f"[v{i}]" for i in range(k))
     # Pad the voice to the full length: sidechaincompress stops when its key input ends.
     chains.append(f"{voices}amix=inputs={k}:normalize=0,apad=whole_dur={length:.3f},asplit[vox][key]")
-    inputs += ["-i", str(bed), "-i", str(hit)]
+    inputs += ["-i", str(bed)]
     chains.append(f"[{k}:a]volume=0.6[bed];[bed][key]sidechaincompress=threshold=0.025:ratio=9:attack=15:release=380[duck]")
-    chains.append(f"[{k + 1}:a]volume=0.8[hit]")
-    sfx = ["[hit]"]
-    for j, slot in enumerate(slots[1:], start=1):
-        inputs += ["-i", str(swoosh)]
-        ms = int(max(0.0, slot.start - 0.25) * 1000)
-        chains.append(f"[{k + 1 + j}:a]adelay={ms}|{ms}[w{j}]")
-        sfx.append(f"[w{j}]")
+    sfx = []
+    for j, cue in enumerate(cues):
+        inputs += ["-i", str(cue.path)]
+        ms = int(cue.at * 1000)
+        chains.append(f"[{k + 1 + j}:a]volume={cue.gain:.2f},adelay={ms}|{ms}[s{j}]")
+        sfx.append(f"[s{j}]")
     chains.append(f"[vox][duck]{''.join(sfx)}amix=inputs={2 + len(sfx)}:normalize=0,"
                   f"atrim=0:{length:.3f},loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[mix]")
     out = work / "mix.wav"
@@ -180,19 +201,24 @@ def render_reel(post: dict, brand: dict, keep_work: bool = False) -> Path:
         raise SystemExit(f"Reel copy spills outside the safe zone. Shorten it or use a smaller visual:\n{details}")
 
     motions = brief.get("motions") or ["push", "pull", "still"]
-    clips = []
-    for i, (beat, slot) in enumerate(zip(reel["beats"], slots)):
-        progress = (slot.start + slot.length) / length
-        frames = beat_frames(chrome, beat, brand, post, i, slot, progress, work)
-        clips.append(beat_clip(frames, slot, rng.choice(motions), work / f"clip{i:02d}.mp4"))
-        print(f"  beat {i + 1:02d} {beat['kind']:<8} {slot.length:4.1f}s  {beat.get('headline', '')}")
+    clips, punches = [], []
+    for i, (beat, narration, slot) in enumerate(zip(reel["beats"], narrations, slots)):
+        frames = beat_frames(chrome, beat, brand, post, i, slot, 0.0, work)
+        word_at = punch_time(beat, narration, rng)
+        local = None if word_at is None else slot.voice_at - slot.start + word_at
+        if local is not None:
+            punches.append(slot.start + local)
+        clips.append(beat_clip(frames, slot, rng.choice(motions), local, work / f"clip{i:02d}.mp4"))
+        print(f"  beat {i + 1:02d} {beat['kind']:<8} {slot.length:4.1f}s  {beat.get('headline', '')}"
+              f"{'  [punch]' if local is not None else ''}")
 
-    audio = mix_audio(narrations, slots, brief.get("mood", "epic"), int(post["seed"]), work)
+    audio = mix_audio(narrations, slots, brief.get("mood", "epic"), int(post["seed"]), punches, work)
     words = [w for b, n, s in zip(reel["beats"], narrations, slots)
              for w in shift(punctuate(n.words, b["voice"]), s.voice_at)]
     accent = PALETTES[post["palette"]]["a1_light"]
     ass = work / "captions.ass"
-    ass.write_text(build_ass(words, accent, brief.get("caption_font", CAPTION_FONTS[0])), encoding="utf-8")
+    ass.write_text(build_ass(words, accent, brief.get("caption_font", CAPTION_FONTS[0]),
+                             brief.get("caption_style", CAPTION_STYLES[0])), encoding="utf-8")
 
     transitions = brief.get("transitions") or list(TRANSITIONS)
     video = post_dir / "reel.mp4"

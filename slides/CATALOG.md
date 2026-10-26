@@ -62,6 +62,7 @@ text spills outside the safe area. See `examples/burn-the-letters.json` for a fu
 | `decode` | `rows`: [[they say, they mean]], `left_title`, `right_title` | what a powerful person's words really signal | rows rise |
 | `quote` | `text`, `who` | a verified line from a thinker, with the book and section in `who` | text rises |
 | `story` | `when`, `text` (max ~30 words), `who` (source) | a historical scene, told tight | card rises |
+| `emblem` | `icon`, `label` | one big glossy icon for a story moment (a sword, a crown, a scroll) | disc pops in |
 | `matrix` | `cols`, `rows`, `filled` | coverage grids, skill maps | cells pop |
 | `icons` | `items`: [[icon, label]], `cols` | 3–6 parallel ideas | cards pop |
 | `image` | `src` (file under `assets/`), `caption`, `shape` (`circle`/`tilt`), `alt` | real photos the user supplied | static |
@@ -85,13 +86,14 @@ search shield star sword target team user warning
 
 | kind | job |
 |---|---|
-| `hook` | first 2 seconds: the pattern-interrupt line. Its headline is on screen from frame one |
-| `story` | the historical scene, in short beats |
-| `fact` | a sourced fact or study finding |
-| `lesson` | the principle, often as a `compare` |
-| `quote` | the thinker's verified line (`quote` visual) |
-| `takeaway` | what to do today |
-| `cta` | follow, with the motto |
+| `hook` | first 2 seconds: the open loop. Its headline is on screen from frame one |
+| `story` | the ONE story, told in short, concrete beats (at least 3 story/turn beats) |
+| `turn` | the twist or climax that closes the hook's loop |
+| `quote` | optional, at most 1: the thinker's verified line |
+| `lesson` | exactly 1: the single takeaway |
+| `cta` | follow, with the motto; ends on the full logo |
+
+Optional `"emphasis": "<word>"` punches the camera in on that spoken word (with a thud or tick).
 
 - 6-14 beats, hook first, cta last, 60-125 narration words in total (about 28-58 s). Over 59 s fails.
 - The narration is spoken by a neural voice and burned in as word-by-word captions, so write it

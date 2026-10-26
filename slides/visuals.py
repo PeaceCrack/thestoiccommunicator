@@ -78,6 +78,12 @@ CSS = """
   -webkit-background-clip: text; background-clip: text; color: transparent; }
 .v-quote p { font-size: 60px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; }
 .v-quote small { font-size: 32px; color: var(--muted); font-weight: 600; }
+.v-emblem { align-items: center; gap: 26px; padding: 20px 0; }
+.v-emblem .disc { width: 400px; height: 400px; border-radius: 50%; display: grid; place-items: center; color: #fff;
+  background: radial-gradient(circle at 35% 30%, var(--accent), var(--accent2) 70%);
+  box-shadow: 0 40px 90px rgba(0,0,0,.4), inset 0 -18px 40px rgba(0,0,0,.25), inset 0 14px 30px rgba(255,255,255,.35); }
+.v-emblem .disc .icon { filter: drop-shadow(0 10px 14px rgba(0,0,0,.35)); }
+.v-emblem span { font-size: 40px; font-weight: 800; text-align: center; }
 .v-story { padding: 40px 44px; border-radius: 30px; background: var(--panel); border: 2px solid var(--line); gap: 22px;
   box-shadow: 0 30px 70px rgba(0,0,0,.18); }
 .v-story .when { font-size: 28px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
@@ -210,6 +216,15 @@ def quote(v: dict) -> str:
     return f'<div class="v v-quote seq"><div class="mark">“</div><p style="--i:1">{_e(v["text"])}</p>{who}</div>'
 
 
+def emblem(v: dict) -> str:
+    """One big glossy icon disc, a single strong graphic for a story moment."""
+    if v["icon"] not in ICONS:
+        raise ValueError(f"unknown icon {v['icon']!r}")
+    label = f'<span style="--i:1">{_e(v["label"])}</span>' if v.get("label") else ""
+    return (f'<div class="v v-emblem seq"><div class="disc pop" style="--i:0">{icon(v["icon"], 210, "#fff", 1.6)}</div>'
+            f'{label}</div>')
+
+
 def story(v: dict) -> str:
     who = f'<small style="--i:2">{_e(v["who"])}</small>' if v.get("who") else ""
     return (f'<div class="v v-story seq"><div class="when" style="--i:0">{_e(v["when"])}</div>'
@@ -262,7 +277,7 @@ def svg(v: dict) -> str:
 VISUALS = {
     "chips": chips, "steps": steps, "checklist": checklist, "stat": stat, "bars": bars, "donut": donut,
     "compare": compare, "code": code, "terminal": terminal, "flow": flow, "timeline": timeline, "decode": decode,
-    "quote": quote, "story": story, "matrix": matrix, "search": search, "icons": icons, "image": image, "svg": svg,
+    "quote": quote, "story": story, "emblem": emblem, "matrix": matrix, "search": search, "icons": icons, "image": image, "svg": svg,
 }
 
 ICON_NAMES = sorted(ICONS)

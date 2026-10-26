@@ -12,9 +12,10 @@ import argparse
 import json
 import random
 from collections import Counter
+from pathlib import Path
 
 from history import all_posts
-from media.captions import CAPTION_FONTS
+from media.captions import CAPTION_STYLES, STYLE_FONTS
 from media.music import MOODS
 from render_reel import TRANSITIONS
 from slides.theme import FONT_PAIRS, PALETTES, THEMES
@@ -28,15 +29,15 @@ PILLARS = {
 THINKERS = ["Marcus Aurelius", "Seneca", "Epictetus", "Plato", "Socrates", "Aristotle", "Zeno of Citium",
             "Cicero", "Musonius Rufus", "Heraclitus", "Diogenes", "Cato the Younger", "Demosthenes",
             "Quintilian", "Pericles", "Chrysippus", "Sun Tzu", "Lao Tzu", "Confucius", "Machiavelli"]
+# Every format tells ONE story with ONE takeaway. No stacking facts and studies.
 FORMATS = [
-    "cold-open story: drop into a real historical moment, reveal the principle, map it to a modern leader",
-    "myth vs truth: a popular belief about confidence or power, broken by the ancient view and a study",
-    "the 3 laws: three rules from one thinker, each with a modern boardroom or meeting example",
-    "dialogue: a short Socratic exchange that traps a bad argument, then the move to use at work",
-    "experiment-backed: a well-known psychology finding, then the 2000-year-old line that predicted it",
-    "before/after: how an average speaker handles a moment vs how a Stoic leader handles it",
-    "decode: what a powerful person's calm behaviour actually signals, line by line",
-    "one word: a single Greek or Latin word (e.g. ataraxia, logos, ethos, kairos) and how to wield it",
+    "cold open: drop the viewer into the most tense second of the story, then rewind",
+    "the twist: tell the story straight, then reveal the detail that flips its meaning",
+    "the choice: the hero faces two options; make the viewer guess before the reveal",
+    "the cost: show what the hero lost by getting it wrong, then what they learned",
+    "underdog: the weakest person in the room wins, and the viewer learns exactly how",
+    "the line: build the whole story toward one sentence the thinker actually said",
+    "rise and fall: the same habit that made someone powerful later destroyed them",
 ]
 HOOKS = [
     "contrarian claim that sounds wrong but is true",
@@ -52,15 +53,17 @@ WILDCARDS = [
     "Draw one original inline-SVG illustration (an `svg` visual): a scene or diagram from the story, not clip art.",
     "Make the reel's second beat a single giant `quote` card, no body text.",
     "Give one reel beat a different surface from the rest, using the `surface` field.",
-    "Put a `stat` count-up on the fact beat, with its source in the note.",
-    "Use a `decode` visual to translate what a powerful person says into what they mean.",
-    "Put a `compare` visual (average speaker vs Stoic leader) on the lesson beat.",
-    "Tell the reel's story beat in present tense, as if it is happening now.",
+    "Open the hook on a single `emblem` graphic of the story's key object, no other visual.",
+    "Make the turn beat a `compare`: what anyone would have done vs what the hero did.",
+    "Tell the whole story in present tense, as if it is happening right now.",
+    "Name one sound or object in every story beat, so the viewer can picture the scene.",
     "End the reel with a one-line challenge the viewer can try in their next conversation today.",
     "Use a `timeline` visual to show the story across years or a single tense day.",
 ]
 BEAT_COUNTS = [7, 8, 8, 9, 9, 10, 11]
-FEATURED = 3
+FEATURED = 2
+# Graphics that serve a story. Data charts (bars, donut, stat) invite fact-stacking, so they're out.
+STORY_VISUALS = ("emblem", "story", "quote", "timeline", "compare", "icons", "chips", "flow", "checklist")
 
 
 def _recent(posts: list[dict], key, n: int) -> list:
@@ -70,6 +73,19 @@ def _recent(posts: list[dict], key, n: int) -> list:
 def _least_used(rng: random.Random, options: list[str], used: Counter) -> str:
     low = min(used.get(o, 0) for o in options)
     return rng.choice([o for o in options if used.get(o, 0) == low])
+
+
+IDEAS = Path(__file__).resolve().parent / "ideas.json"
+
+
+def mental_models() -> list[dict]:
+    return json.loads(IDEAS.read_text(encoding="utf-8"))["mental_models"]
+
+
+def suggest_models(rng: random.Random, posts: list[dict], n: int = 3) -> list[dict]:
+    """The mental models used least so far (ties broken at random)."""
+    used = Counter(p.get("mental_model") for p in posts)
+    return sorted(mental_models(), key=lambda m: (used.get(m["name"], 0), rng.random()))[:n]
 
 
 def roll(rng: random.Random) -> dict:
@@ -82,9 +98,11 @@ def roll(rng: random.Random) -> dict:
     thinker_use = Counter(p.get("philosopher") for p in posts)
     thinkers = sorted(THINKERS, key=lambda t: (thinker_use.get(t, 0), rng.random()))[:4]
     palette = rng.choice([p for p in PALETTES if p not in avoid_palettes])
-    visual_pool = [name for name in VISUALS if name not in ("image", "svg", "code", "terminal", "search")]
+    visual_pool = [v for v in STORY_VISUALS if v in VISUALS]
     theme = rng.choice([t for t in THEMES if t not in avoid_theme])
+    caption_style = rng.choice(CAPTION_STYLES)
     return {
+        "suggested_mental_models": suggest_models(rng, posts),
         "pillar": pillar,
         "pillar_meaning": PILLARS[pillar],
         "suggested_thinkers": thinkers,
@@ -101,7 +119,8 @@ def roll(rng: random.Random) -> dict:
             "mood": rng.choice([m for m in MOODS if m not in avoid_mood]),
             "transitions": rng.sample(TRANSITIONS, rng.randint(3, 5)),
             "motions": rng.sample(["push", "pull", "still"], rng.randint(2, 3)),
-            "caption_font": rng.choice(CAPTION_FONTS),
+            "caption_style": caption_style,
+            "caption_font": rng.choice(STYLE_FONTS[caption_style]),
         },
         "wildcard": rng.choice(WILDCARDS),
     }

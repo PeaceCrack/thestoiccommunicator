@@ -2,11 +2,14 @@
 
 from pathlib import Path
 
+import json
+
 from history import repeats
 from slides.theme import FONT_PAIRS, PALETTES, THEMES
 from slides.visuals import VISUALS, render_visual
 
 ROOT = Path(__file__).resolve().parent
+MENTAL_MODELS = {m["name"] for m in json.loads((ROOT / "ideas.json").read_text(encoding="utf-8"))["mental_models"]}
 MIN_SLIDES = 6
 MAX_SLIDES = 12
 MAX_ANIMATED = 3
@@ -103,14 +106,28 @@ def validate_post(post: dict) -> list[str]:
     for field in ("topic", "philosopher", "story"):
         if not post.get(field):
             errors.append(f"{field} is missing (it is how history.py stops repeats)")
-    for fact in post.get("facts", []):
+    story = post.get("story") or {}
+    if story and not story.get("source"):
+        errors.append("story.source is missing: name the ancient author and book, or a solid history source")
+    if not post.get("takeaway"):
+        errors.append("takeaway is missing: the ONE sentence the viewer should remember")
+    facts = post.get("facts", [])
+    if len(facts) > MAX_FACTS:
+        errors.append(f"{len(facts)} facts: one story per reel, not a stack of facts (max {MAX_FACTS} supporting fact)")
+    for fact in facts:
         if not fact.get("source"):
             errors.append(f"fact {fact.get('claim', '')[:40]!r} needs a source")
+    if post.get("mental_model") and post["mental_model"] not in MENTAL_MODELS:
+        errors.append(f"mental_model {post['mental_model']!r} is not in ideas.json")
     errors.extend(repeats(post))
     return errors
 
 PILLARS = ("think", "speak", "influence")
-BEAT_KINDS = {"hook", "story", "fact", "lesson", "quote", "takeaway", "cta"}
+# One story, one takeaway: the hook opens it, story/turn beats tell it (the turn is the twist or
+# climax), at most one quote is the thinker's line, ONE lesson is the takeaway, the cta closes.
+BEAT_KINDS = {"hook", "story", "turn", "quote", "lesson", "cta"}
+MIN_STORY_BEATS = 3
+MAX_FACTS = 1
 MIN_BEATS, MAX_BEATS = 6, 14
 BEAT_MAX_WORDS = 34
 REEL_MIN_WORDS, REEL_MAX_WORDS = 60, 125   # about 28-58 s of narration
@@ -130,6 +147,13 @@ def validate_reel(post: dict) -> list[str]:
         errors.append("first reel beat must be the hook")
     if beats and beats[-1].get("kind") != "cta":
         errors.append("last reel beat must be the cta")
+    kinds = [b.get("kind") for b in beats]
+    if sum(k in ("story", "turn") for k in kinds) < MIN_STORY_BEATS:
+        errors.append(f"tell the story in at least {MIN_STORY_BEATS} story/turn beats")
+    if kinds.count("lesson") != 1:
+        errors.append(f"{kinds.count('lesson')} lesson beats: exactly 1, the one takeaway")
+    if kinds.count("quote") > 1:
+        errors.append("at most 1 quote beat")
     total = 0
     for index, beat in enumerate(beats, start=1):
         label = f"beat {index}"

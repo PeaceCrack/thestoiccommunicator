@@ -1,8 +1,8 @@
 """Procedural, royalty-free score and sound design, synthesized with ffmpeg alone.
 
 A mood picks the chord progression, tempo pulse and brightness; the post's seed picks the key
-and texture, so every reel gets its own bed. Sound design adds an impact boom under the hook
-and a whoosh on every cut. Nothing here is sampled from anyone else's recording.
+texture and tempo, so every reel gets its own bed. Sound effects live in sfx.py.
+Nothing here is sampled from anyone else's recording.
 """
 
 import random
@@ -64,7 +64,8 @@ def score(mood: str, seed: int, length: float, out: Path) -> Path:
     bar = spec["bar_s"]
     bars = int(length / bar) + 2
     chords = spec["chords"]
-    pulse = _pulse_expr(spec["pulse"], spec["bpm"])
+    bpm = spec["bpm"] + rng.randint(-8, 8) if spec["bpm"] else 0  # tempo varies reel to reel
+    pulse = _pulse_expr(spec["pulse"], bpm)
     seg_dir = out.parent / "music-parts"
     seg_dir.mkdir(parents=True, exist_ok=True)
     parts = []
@@ -85,19 +86,4 @@ def score(mood: str, seed: int, length: float, out: Path) -> Path:
     chain.append(f"{last}aecho=0.8:0.82:110|230|370:0.32|0.22|0.14,atrim=0:{length:.3f},"
                  f"afade=t=in:d=1.2,afade=t=out:st={max(0.0, length - 2.5):.3f}:d=2.5[m]")
     run([*inputs, "-filter_complex", ";".join(chain), "-map", "[m]", "-ar", str(RATE), "-ac", "2", str(out)])
-    return out
-
-
-def boom(out: Path) -> Path:
-    """Sub-bass impact for the hook."""
-    expr = "0.9*sin(2*PI*(38+90*exp(-7*t))*t)*exp(-2.4*t)"
-    run(["-f", "lavfi", "-i", f"aevalsrc='{expr}|{expr}':s={RATE}:d=2.4", "-af", "lowpass=f=900", str(out)])
-    return out
-
-
-def whoosh(out: Path) -> Path:
-    """Filtered noise swell for transitions."""
-    run(["-f", "lavfi", "-i", f"anoisesrc=color=pink:r={RATE}:d=0.7:a=0.5",
-         "-af", "bandpass=f=1400:width_type=o:w=1.6,afade=t=in:d=0.45:curve=exp,afade=t=out:st=0.45:d=0.25,"
-                "volume=7,aformat=channel_layouts=stereo", str(out)])
     return out

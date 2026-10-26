@@ -16,7 +16,8 @@ sys.path.insert(0, str(ROOT))
 import creative_brief  # noqa: E402
 import history  # noqa: E402
 import publish  # noqa: E402
-from media.captions import Timed, ass_color, build_ass, phrases, punctuate, shift  # noqa: E402
+from media.captions import CAPTION_STYLES, Timed, ass_color, build_ass, phrases, punctuate, shift  # noqa: E402
+from media import sfx  # noqa: E402
 from media.voice import Narration, Word  # noqa: E402
 from render_reel import XFADE_S, timeline, total_length  # noqa: E402
 from slides.art import GENERATORS, art_layer  # noqa: E402
@@ -134,6 +135,45 @@ class ValidateReelTest(EmptyHistory):
         self.assertTrue(any("no < or >" in e for e in validate_reel(post)))
 
 
+class OneStoryTest(EmptyHistory):
+    def test_rejects_fact_beats_and_fact_stacking(self):
+        post = copy.deepcopy(EXAMPLE)
+        post["reel"]["beats"][2]["kind"] = "fact"
+        post["facts"] = [{"claim": "a", "source": "x"}, {"claim": "b", "source": "y"}]
+        errors = validate_reel(post) + validate_post(post)
+        self.assertTrue(any("unknown kind 'fact'" in e for e in errors))
+        self.assertTrue(any("not a stack of facts" in e for e in errors))
+
+    def test_needs_one_lesson_and_a_told_story(self):
+        post = copy.deepcopy(EXAMPLE)
+        post["reel"]["beats"] = [b for b in post["reel"]["beats"] if b["kind"] not in ("lesson", "turn")]
+        errors = validate_reel(post)
+        self.assertTrue(any("exactly 1, the one takeaway" in e for e in errors))
+        self.assertTrue(any("at least 3 story/turn beats" in e for e in errors))
+
+    def test_needs_takeaway_and_story_source(self):
+        post = copy.deepcopy(EXAMPLE)
+        del post["takeaway"]
+        post["story"] = {"title": "x"}
+        errors = validate_post(post)
+        self.assertTrue(any("takeaway is missing" in e for e in errors))
+        self.assertTrue(any("story.source" in e for e in errors))
+
+
+class SfxTest(unittest.TestCase):
+    def test_cut_sounds_vary_and_some_cuts_are_silent(self):
+        made = []
+        def fake_make(kind, rng, out):
+            made.append(kind)
+            return out
+        with mock.patch.object(sfx, "make", side_effect=fake_make), tempfile.TemporaryDirectory() as tmp:
+            cues = sfx.plan_cuts([float(t) for t in range(1, 40)], [2.5], random.Random(4), Path(tmp))
+        cut_kinds = made[1:-1]
+        self.assertTrue(all(a != b for a, b in zip(cut_kinds, cut_kinds[1:])))
+        self.assertLess(len(cues), 39 + 2)
+        self.assertGreater(len(set(cut_kinds)), 2)
+
+
 class ThemeTest(unittest.TestCase):
     def test_every_palette_builds_every_surface(self):
         for name, palette in PALETTES.items():
@@ -195,6 +235,12 @@ class CaptionsTest(unittest.TestCase):
         groups = [[w.text for w in g] for g in phrases(timed)]
         self.assertEqual(groups, [["But", "Marcus", "was"], ["alive."], ["Within", "months,"]])
 
+    def test_every_caption_style_renders(self):
+        timed = [Timed(0, .3, "Talk"), Timed(.3, .6, "less.")]
+        for style in CAPTION_STYLES:
+            self.assertEqual(build_ass(timed, "#ffcc00", "Georgia", style).count("Dialogue:"), 2)
+        self.assertIn("}less", build_ass(timed, "#ffcc00", "Georgia", "single"))
+
     def test_one_event_per_word(self):
         timed = [Timed(0, .3, "One"), Timed(.3, .6, "two."), Timed(.7, 1, "Three")]
         ass = build_ass(timed, "#ffcc00", "Impact")
@@ -222,7 +268,9 @@ class BriefTest(EmptyHistory):
             self.assertIn(brief["palette"], PALETTES)
             self.assertIn(brief["fonts"], FONT_PAIRS)
             self.assertIn(brief["pillar"], creative_brief.PILLARS)
-            self.assertEqual(len(set(brief["feature_visuals"])), 3)
+            self.assertEqual(len(set(brief["feature_visuals"])), creative_brief.FEATURED)
+            self.assertIn(brief["reel_style"]["caption_style"], CAPTION_STYLES)
+            self.assertEqual(len(brief["suggested_mental_models"]), 3)
 
     def test_avoids_last_look_and_balances_pillars(self):
         self.add_post({"slug": "x", "theme": "temple", "palette": "bloodstone", "fonts": "bebas",

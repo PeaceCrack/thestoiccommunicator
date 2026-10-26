@@ -7,17 +7,13 @@
   "story": {
     "title": "Marcus Aurelius burns Avidius Cassius's letters unread",
     "who": "Marcus Aurelius",
-    "when": "175 AD"
+    "when": "175 AD",
+    "source": "Cassius Dio, Roman History, Book 72"
   },
   "quotes": [
     "The best revenge is not to be like your enemy."
   ],
-  "facts": [
-    {
-      "claim": "After the revolt of Avidius Cassius, Marcus had the rebel's letters burned without reading them",
-      "source": "Cassius Dio, Roman History, Book 72"
-    }
-  ],
+  "facts": [],
   "theme": "colosseum",
   "palette": "imperial-gold",
   "fonts": "cinzel",
@@ -32,9 +28,11 @@
     ],
     "motions": [
       "push",
-      "pull"
+      "pull",
+      "still"
     ],
-    "caption_font": "Arial Black"
+    "caption_style": "single",
+    "caption_font": "Georgia"
   },
   "alt_text": "Gold Cinzel lettering on a dark arena backdrop reads: HE BURNED THE LETTERS.",
   "search_terms": [
@@ -176,71 +174,64 @@
         "kind": "hook",
         "kicker": "ROME, 175 AD",
         "headline": "HE BURNED THE EVIDENCE",
-        "voice": "He had proof of everyone who betrayed him. And he burned it."
+        "voice": "He held the names of every traitor in Rome. And he burned them.",
+        "emphasis": "burned"
       },
       {
         "kind": "story",
-        "headline": "A general claims the throne",
+        "headline": "A general takes the throne",
         "visual": {
-          "type": "story",
-          "when": "Syria, 175 AD",
-          "text": "Avidius Cassius hears the emperor is dead, and declares himself emperor."
+          "type": "emblem",
+          "icon": "sword",
+          "label": "Avidius Cassius"
         },
-        "voice": "175 AD. General Avidius Cassius hears Marcus Aurelius is dead, and declares himself emperor."
+        "voice": "Syria. A false rumour says the emperor is dead. His best general, Avidius Cassius, declares himself emperor."
       },
       {
         "kind": "story",
         "headline": "But Marcus was alive",
-        "body": "Within months, Cassius's own officers killed him.",
-        "voice": "But Marcus was alive. Within months, Cassius was killed by his own officers."
-      },
-      {
-        "kind": "fact",
-        "kicker": "THE LETTERS",
-        "headline": "Proof of every traitor",
         "visual": {
-          "type": "icons",
-          "cols": 3,
-          "items": [
-            [
-              "scroll",
-              "Letters"
-            ],
-            [
-              "mask",
-              "Names"
-            ],
-            [
-              "sword",
-              "Leverage"
-            ]
-          ]
+          "type": "emblem",
+          "icon": "crown",
+          "label": "Marcus Aurelius"
         },
-        "voice": "Then his letters reached Marcus. Inside: every senator who backed the revolt."
+        "voice": "But Marcus Aurelius was alive. Within months, Cassius was dead, killed by his own officers.",
+        "emphasis": "alive"
       },
       {
-        "kind": "lesson",
-        "headline": "He burned them unread",
+        "kind": "turn",
+        "headline": "A chest of letters arrives",
+        "visual": {
+          "type": "emblem",
+          "icon": "scroll",
+          "label": "Every name inside"
+        },
+        "voice": "Then a chest arrives. The rebel's letters. Inside, every senator who backed him."
+      },
+      {
+        "kind": "turn",
+        "headline": "He never opened them",
         "visual": {
           "type": "compare",
           "left": {
-            "title": "USUAL MOVE",
+            "title": "ANY EMPEROR",
             "lines": [
               "Read",
               "Purge",
-              "Fear"
+              "Rule by fear"
             ]
           },
           "right": {
-            "title": "STOIC MOVE",
+            "title": "MARCUS",
             "lines": [
               "Burn",
-              "Keep allies",
-              "Trust"
+              "Forgive",
+              "Keep them loyal"
             ]
           }
         },
-        "voice": "Any other ruler would purge them. Marcus burned the letters unread."
+        "voice": "Any emperor would read them and start the purge. Marcus burned them without reading a line.",
+        "emphasis": "burned"
       },
       {
         "kind": "quote",
@@ -252,10 +243,10 @@
         "voice": "He wrote: the best revenge is not to be like your enemy."
       },
       {
-        "kind": "takeaway",
-        "headline": "Restraint is leverage",
-        "body": "Grudges tax the leader first. Judge people by their next move.",
-        "voice": "Grudges tax the leader first. Judge people by their next move, not their last."
+        "kind": "lesson",
+        "headline": "Drop the grudge, keep the room",
+        "voice": "So next time someone crosses you, don't keep the file. Keep the room.",
+        "emphasis": "room"
       },
       {
         "kind": "cta",
@@ -264,5 +255,7 @@
         "voice": "Follow to think like Plato, speak like a leader, and influence like a CEO."
       }
     ]
-  }
+  },
+  "mental_model": "Cognitive Reframing",
+  "takeaway": "Power you choose not to use still lands: drop the grudge and keep the room."
 }

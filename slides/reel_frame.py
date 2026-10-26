@@ -2,8 +2,8 @@
 
 Copy stays inside the safe zone that Instagram Reels and YouTube Shorts leave clear: y 230-1300
 for the card, the right 150px free of copy (the like/comment rail), and y 1340-1540 reserved
-for the burned-in captions that ffmpeg adds later. A progress bar along the top shows where
-the viewer is, which keeps people watching to the end.
+for the burned-in captions that ffmpeg adds later. No progress bar or page numbers: a reel
+should feel like one film, not a deck of slides. The cta beat ends on the full logo.
 """
 
 import random
@@ -16,7 +16,7 @@ from .theme import DEFAULT_THEME, THEMES, surface_css
 from .visuals import CSS as VISUAL_CSS, render_visual
 
 WIDTH, HEIGHT = 1080, 1920
-BEAT_ROLES = {"hook": "cover", "story": "stake", "fact": "content", "lesson": "content", "quote": "recap",
+BEAT_ROLES = {"hook": "cover", "story": "stake", "turn": "content", "fact": "content", "lesson": "content", "quote": "recap",
               "takeaway": "recap", "cta": "cta"}
 LAYOUTS = ["top", "center", "low"]
 
@@ -30,9 +30,8 @@ body { -webkit-font-smoothing: antialiased; }
 .art-svg { width: 100%; height: 100%; }
 .shade { position: absolute; left: 0; right: 0; bottom: 0; height: 760px; z-index: 0;
   background: linear-gradient(to top, rgba(0,0,0,.55), transparent); }
-.progress { position: absolute; z-index: 2; left: 60px; right: 60px; top: 150px; height: 8px; border-radius: 4px;
-  background: rgba(255,255,255,.18); overflow: hidden; }
-.progress i { display: block; height: 100%; background: var(--grad); border-radius: 4px; }
+.outro-logo { width: 360px; height: 360px; border-radius: 50%; align-self: center;
+  box-shadow: 0 30px 80px rgba(0,0,0,.45); }
 .brand { position: absolute; z-index: 2; left: 90px; top: 186px; display: flex; align-items: center; gap: 14px;
   font-size: 30px; font-weight: 700; opacity: .9; }
 .brand img { width: 50px; height: 50px; border-radius: 50%; }
@@ -94,6 +93,9 @@ def plan_beat(beat: dict, theme_name: str, seed: int, index: int) -> dict:
 
 def _copy(beat: dict, brand: dict) -> str:
     parts = []
+    if beat["kind"] == "cta":
+        logo = escape(brand["logo"].rsplit("/", 1)[-1])
+        parts.append(f'<img class="outro-logo pop" style="--i:0" src="{logo}" alt="">')
     if beat.get("kicker"):
         parts.append(f'<div class="kicker rise" style="--i:0">{escape(beat["kicker"])}</div>')
     if beat.get("headline"):
@@ -115,7 +117,6 @@ def frame_section(beat: dict, brand: dict, plan: dict, progress: float, t: float
     logo = escape(brand["logo"].rsplit("/", 1)[-1])
     return (f'<section class="{classes}" style="{style}">'
             f'<div class="art">{art_layer(plan["art"], plan["art_seed"], HEIGHT)}</div><div class="shade"></div>'
-            f'<div class="progress"><i style="width:{progress * 100:.1f}%"></i></div>'
             f'<div class="brand"><img src="{logo}" alt="">{escape(brand["name"])}</div>'
             f'<div class="card">{_copy(beat, brand)}</div>'
             f'<div class="handle">{escape(brand["handle"])}</div></section>')
