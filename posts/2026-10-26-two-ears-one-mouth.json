@@ -1,0 +1,168 @@
+{
+  "slug": "two-ears-one-mouth",
+  "date": "2026-10-26",
+  "pillar": "speak",
+  "philosopher": "Zeno of Citium",
+  "topic": "Two ears, one mouth: Harvard's follow-up question study and the Stoic founder who predicted it",
+  "story": {
+    "title": "Zeno of Citium silences a young chatterbox in Athens",
+    "who": "Zeno of Citium, founder of Stoicism",
+    "when": "Athens, c. 300 BC (Diogenes Laertius, Lives 7.23)"
+  },
+  "quotes": [
+    "The reason why we have two ears and only one mouth is that we may listen the more and talk the less."
+  ],
+  "facts": [
+    {
+      "claim": "To a young man who was talking nonsense, Zeno said we have two ears and only one mouth so that we may listen more and talk less",
+      "source": "Diogenes Laertius, Lives of the Eminent Philosophers 7.23, trans. R. D. Hicks (1925)"
+    },
+    {
+      "claim": "Across live conversation studies, people who asked more questions, especially follow-up questions, were liked more by their partners; responsiveness explained the effect, and people did not predict it",
+      "source": "Huang, Yeomans, Brooks, Minson & Gino, It doesn't hurt to ask: Question-asking increases liking, Journal of Personality and Social Psychology 113(3), 2017"
+    },
+    {
+      "claim": "In the speed-dating study, people who asked more follow-up questions were more likely to get agreement for a second date (a later reanalysis disputes this study's statistics)",
+      "source": "Huang et al., Journal of Personality and Social Psychology, 2017, Study 3"
+    }
+  ],
+  "theme": "temple",
+  "palette": "marble-bronze",
+  "fonts": "playfair",
+  "seed": 87856,
+  "reel_style": {
+    "beats": 7,
+    "mood": "epic",
+    "transitions": [
+      "radial",
+      "fadeblack",
+      "slideup",
+      "smoothleft",
+      "hblur"
+    ],
+    "motions": [
+      "pull",
+      "push",
+      "still"
+    ],
+    "caption_font": "Arial Black"
+  },
+  "search_terms": [
+    "how to be more likable",
+    "zeno stoicism"
+  ],
+  "reel": {
+    "beats": [
+      {
+        "kind": "hook",
+        "kicker": "HARVARD, 2017",
+        "headline": "WANT THEM TO LIKE YOU MORE?",
+        "voice": "Want people to like you more? Talk less. Harvard proved it. A Stoic called it first."
+      },
+      {
+        "kind": "fact",
+        "kicker": "HUANG ET AL., JPSP 2017",
+        "headline": "Askers were liked more",
+        "visual": {
+          "type": "compare",
+          "left": {
+            "title": "FEW QUESTIONS",
+            "lines": [
+              "Talks about self",
+              "Liked less"
+            ]
+          },
+          "right": {
+            "title": "MANY QUESTIONS",
+            "lines": [
+              "Asks, then listens",
+              "Liked more"
+            ]
+          }
+        },
+        "voice": "Strangers chatted. Some were told to ask lots of questions. Their partners liked them more."
+      },
+      {
+        "kind": "fact",
+        "kicker": "SPEED DATING",
+        "headline": "Follow-ups won second dates",
+        "visual": {
+          "type": "chips",
+          "items": [
+            "What happened next?",
+            "Why then?",
+            "How did that feel?"
+          ]
+        },
+        "voice": "Follow-up questions worked best. Speed daters who asked more got more second dates."
+      },
+      {
+        "kind": "story",
+        "headline": "A young man won't stop",
+        "visual": {
+          "type": "story",
+          "when": "Athens, c. 300 BC",
+          "text": "A young man is talking nonsense. Zeno, founder of Stoicism, cuts in.",
+          "who": "Diogenes Laertius, Lives 7.23"
+        },
+        "voice": "Athens. A young man talks nonsense. Zeno, founder of Stoicism, cuts in."
+      },
+      {
+        "kind": "quote",
+        "visual": {
+          "type": "quote",
+          "text": "We have two ears and only one mouth, that we may listen the more and talk the less.",
+          "who": "Zeno, in Diogenes Laertius, Lives 7.23"
+        },
+        "voice": "We have 2 ears and only 1 mouth, so we may listen more and talk less."
+      },
+      {
+        "kind": "lesson",
+        "headline": "Speak one part in three",
+        "visual": {
+          "type": "donut",
+          "value": 33,
+          "label": "your share of the talking",
+          "note": "Illustrative: Zeno's 2 to 1 ratio"
+        },
+        "voice": "A follow-up proves you heard. That is what people remember."
+      },
+      {
+        "kind": "takeaway",
+        "headline": "Today's challenge",
+        "visual": {
+          "type": "checklist",
+          "items": [
+            "Ask one question",
+            "Follow up twice",
+            "Then talk about you"
+          ],
+          "done": 2
+        },
+        "voice": "Your challenge today: in your next conversation, follow up twice before you say a word about yourself."
+      },
+      {
+        "kind": "cta",
+        "headline": "FOLLOW FOR STOIC POWER",
+        "body": "Think like Plato. Speak like a leader. Influence like a CEO.",
+        "voice": "Follow to think like Plato, speak like a leader, and influence like a CEO."
+      }
+    ]
+  },
+  "reel_caption": "Want people to like you more? Ask, then ask again.\n\nIn 2017, Harvard researchers (Huang, Yeomans, Brooks, Minson and Gino) found that people who ask more questions are liked more. Follow-up questions did the most work. Speed daters who asked them got more second dates.\n\nZeno of Citium said it around 300 BC. A young man in Athens wouldn't stop talking, so Zeno told him we've got two ears and one mouth to listen more and talk less. It's in Diogenes Laertius, Lives 7.23.\n\nIf you've been searching how to be more likable, here's the cheapest answer zeno stoicism gives you: let them talk, and prove you heard.\n\nI'm trying it today. Follow up twice before you talk about yourself.\n\nSave this for your next meeting.\n\n#stoicism #communication #leadership",
+  "youtube": {
+    "title": "Why Quiet People Get Liked More #Shorts",
+    "description": "Harvard found that people who ask more follow-up questions are liked more. Zeno of Citium told a chatterbox the same thing around 300 BC. Sources: Huang et al., Journal of Personality and Social Psychology, 2017; Diogenes Laertius, Lives 7.23.\n\nThink like Plato. Speak like a leader. Influence like a CEO.\n\n#Shorts #stoicism #communication",
+    "tags": [
+      "zeno of citium",
+      "stoicism",
+      "two ears one mouth",
+      "how to be more likable",
+      "listening skills",
+      "follow-up questions",
+      "communication",
+      "leadership",
+      "philosophy"
+    ]
+  }
+}
