@@ -14,7 +14,7 @@ import time
 
 POLL_INTERVAL_S = 20
 DEFAULT_TIMEOUT_S = 1200
-PLATFORMS = ("ig_carousel", "ig_reel", "youtube")
+PLATFORMS = ("ig_reel", "youtube")
 HTTP_TIMEOUT_S = 30
 
 
@@ -83,8 +83,6 @@ def main() -> int:
     if entry.get("youtube") and entry.get("youtube_privacy") not in (None, "public"):
         print(f"NOTE: YouTube set the Short to {entry['youtube_privacy']!r}. Unverified API projects upload as "
               "private until Google's audit passes. Make it public in YouTube Studio (SETUP.md, part 4.6).")
-    if entry.get("video_fallbacks"):
-        print(f"NOTE: carousel slides {entry['video_fallbacks']} went up as stills (Instagram rejected the video)")
     if run["conclusion"] != "success" or not all(entry.get(p) for p in PLATFORMS):
         print("FAILED. Open the run, expand the Publish step and read the FAILED line.")
         return 1

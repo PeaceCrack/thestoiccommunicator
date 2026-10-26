@@ -88,7 +88,7 @@ class RepeatsTest(EmptyHistory):
     def test_catches_reused_story_quote_topic_and_cover(self):
         self.add_post(self.other(topic=EXAMPLE["topic"], story=EXAMPLE["story"],
                                  quotes=["The best revenge is not to be like your enemy!"],
-                                 slides=[{"kind": "cover", "headline": "He burned the letters"}]))
+                                 reel={"beats": [{"kind": "hook", "headline": "He burned the evidence"}]}))
         problems = " | ".join(history.repeats(EXAMPLE))
         for word in ("topic repeats", "story repeats", "quote already used", "cover line repeats"):
             self.assertIn(word, problems)
@@ -249,19 +249,19 @@ class PublishTest(unittest.TestCase):
         publish.record("a", "ig_reel", "2")
         publish.record("b", "youtube", "y")
         self.assertEqual(publish.missing("a"), ["youtube"])
-        self.assertEqual(publish.missing("b"), ["ig_carousel", "ig_reel"])
+        self.assertEqual(publish.missing("b"), ["ig_reel"])
         self.assertEqual(publish.entry_for("a")["ig_reel"], "2")
+
+    def test_posts_only_reel_and_short(self):
+        self.assertEqual(publish.PLATFORMS, ("ig_reel", "youtube"))
+        reel_only = {"slug": "zz-none"}
+        self.assertFalse(publish.is_rendered(reel_only))
 
     def test_video_base_switches_raw_to_jsdelivr(self):
         raw = "https://raw.githubusercontent.com/PeaceCrack/thestoiccommunicator/abc123/out/{slug}"
         self.assertEqual(publish.video_base(raw),
                          "https://cdn.jsdelivr.net/gh/PeaceCrack/thestoiccommunicator@abc123/out/{slug}")
         self.assertEqual(publish.video_base("https://cdn.example.com/x"), "https://cdn.example.com/x")
-
-    def test_carousel_items_use_video_only_when_rendered(self):
-        post = {"slug": "zz-none", "slides": [{}, {}]}
-        items = publish.carousel_items(post, "https://h/out/{slug}", "https://v/out/{slug}")
-        self.assertEqual(items[0], {"image": "https://h/out/zz-none/01.jpg", "video": None})
 
     def test_youtube_metadata(self):
         with mock.patch.dict(os.environ, {"YT_PRIVACY": "unlisted"}):
@@ -285,9 +285,8 @@ class PublishTest(unittest.TestCase):
                 publish.ig_config()
 
     def test_failure_on_one_platform_keeps_the_others(self):
-        post = {"slug": "p", "caption": "c", "reel_caption": "r", "slides": []}
+        post = {"slug": "p", "reel_caption": "r"}
         with mock.patch.object(publish, "ig_config", return_value={}), \
-                mock.patch.object(publish, "publish_carousel", return_value=("c1", [])), \
                 mock.patch.object(publish, "publish_reel", side_effect=publish.PublishError("boom")), \
                 mock.patch.object(publish, "publish_youtube", return_value=("y1", "public")):
             errors = publish.publish_all(post, list(publish.PLATFORMS))

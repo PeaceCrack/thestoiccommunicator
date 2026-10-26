@@ -5,9 +5,9 @@
  ─────────────────────────            ───────────────────────────────────────────────
  /stoic-communicator-post             stores posts/ and out/<slug>/ (JPEGs, MP4s)
  writes + renders a post        ──►   Action "Publish post" runs publish.py with your secrets
- you say "push" in the chat                │                    │                  │
-                                           ▼                    ▼                  ▼
-                                    IG carousel           IG Reel         YouTube Short
+ you say "push" in the chat                │                    │
+                                           ▼                    ▼
+                                    Instagram Reel       YouTube Short
 ```
 
 Allow about an hour, once. Parts 1-5 are one-time. After that, each post is just
@@ -208,14 +208,13 @@ In Claude Code, in this folder: `/stoic-communicator-post`.
 
 1. Claude rolls a random creative brief and suggests 4 topics. Pick one (or type your own).
 2. A background agent researches the story, quotes and facts, writes the post, then renders
-   the carousel and the reel. It **does not push**.
-3. Claude shows you the contact sheet and the reel path. Watch `out/<slug>/reel.mp4`.
-4. Say **push**. Claude commits, pushes and watches the GitHub run, then reports the carousel,
+   the reel. It **does not push**.
+3. Claude shows you a frame sheet and sends you `out/<slug>/reel.mp4` to watch.
+4. Say **push**. Claude commits, pushes and watches the GitHub run, then reports the
    Reel and Short IDs.
-5. Add the alt text in the Instagram app: post → ⋯ → **Edit** → **Alt text**.
 
 To retry only one platform: Actions → **Publish post** → **Run workflow** → post file, `only` =
-`youtube` (or `ig_reel`, `ig_carousel`), untick dry run.
+`youtube` or `ig_reel`, untick dry run.
 
 ---
 

@@ -1,7 +1,7 @@
 name: Publish post
 
 on:
-  # Pushing a new post file to main publishes it: IG carousel, IG Reel, YouTube Short.
+  # Pushing a new post file to main publishes it: Instagram Reel + YouTube Short.
   push:
     branches: [main]
     paths: ["posts/**"]
@@ -12,7 +12,7 @@ on:
         required: false
         default: ""
       only:
-        description: "Only these platforms (comma-separated: ig_carousel,ig_reel,youtube). Empty = all missing"
+        description: "Only these platforms (comma-separated: ig_reel,youtube). Empty = all missing"
         required: false
         default: ""
       dry_run:

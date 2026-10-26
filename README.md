@@ -2,17 +2,17 @@
 
 *Think like Plato. Speak like a leader. Influence like a CEO.* Ancient philosophy for modern dominance.
 
-One JSON file per post becomes three posts: an **Instagram carousel**, an **Instagram Reel**, and
-the same vertical video as a **YouTube Short**.
+One JSON file per post becomes one narrated vertical video, posted as an **Instagram Reel** and a
+**YouTube Short**. (No carousel: `render.py` still renders carousels by hand, but nothing posts them.)
 
 ```
-posts/<date>-<slug>.json   the copy: carousel slides, reel beats + narration, captions, YouTube title
+posts/<date>-<slug>.json   the copy: reel beats + narration, reel caption, YouTube title, sources
 brand.json                 name, handle, motto, logo, narrator voice
 creative_brief.py          rolls theme, palette, fonts, music mood, transitions, story format, hook, wildcard
 history.py                 every past topic, story, quote and look; validate.py refuses repeats
-render.py                  carousel → out/<slug>/01.jpg … (+ looping MP4s for animated slides)
+render.py                  carousel renderer, kept for manual use; not part of posting
 render_reel.py             reel → out/<slug>/reel.mp4 + reel_cover.jpg (voice, score, captions, transitions)
-publish.py                 posts carousel, Reel and Short (dry run by default), records each in published.json
+publish.py                 posts the Reel and the Short (dry run by default), records each in published.json
 watch_run.py               waits for the GitHub run after a push and reports each platform
 youtube_auth.py            one-time Google sign-in that stores the YouTube secrets in GitHub
 .github/workflows/publish.yml   runs publish.py when a new file lands in posts/
@@ -27,17 +27,16 @@ The easy way is `/stoic-communicator-post` in Claude Code. By hand:
 
 ```bash
 python3 creative_brief.py
-python3 render.py posts/2026-10-20-amor-fati.json
 .venv/bin/python render_reel.py posts/2026-10-20-amor-fati.json
 python3 publish.py posts/2026-10-20-amor-fati.json        # dry run
 git add posts out && git commit -m "feat: add amor fati post" && git push
 ```
 
-**Pushing a new file in `posts/` to main publishes it everywhere.** Only push when it's ready.
+**Pushing a new file in `posts/` to main publishes it as a Reel and a Short.** Only push when it's ready.
 
 ## How the reel is made
 
-- **Frames**: each beat is a 1080x1920 card (same themes, art and infographics as the carousel),
+- **Frames**: each beat is a 1080x1920 card (themes, generative art and infographics),
   animated in headless Chrome at 24 fps, then held under a slow push or pull.
 - **Cuts**: ffmpeg `xfade` transitions (the brief picks 3-5 of 12), plus film grain and a vignette.
 - **Voice**: Microsoft neural voice via `edge-tts` (free, no key), EQ'd for chest and presence.

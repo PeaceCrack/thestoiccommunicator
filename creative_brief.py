@@ -4,7 +4,7 @@
   python3 creative_brief.py --seed 7   # reproducible
 
 Avoids the last post's theme, font pairing and reel mood and the last three palettes; leans
-toward the pillar and thinkers used least so far; picks the carousel shape, the reel's motion,
+toward the pillar and thinkers used least so far; picks the reel's length, visuals, motion,
 transitions and caption face, a story format, a hook formula and one wildcard constraint.
 """
 
@@ -50,16 +50,15 @@ HOOKS = [
 ]
 WILDCARDS = [
     "Draw one original inline-SVG illustration (an `svg` visual): a scene or diagram from the story, not clip art.",
-    "Make the carousel's stake slide a single giant `quote`, no body text.",
-    "Give one content slide a different surface from the rest, using the `surface` field.",
-    "Use the `number` layout for every carousel content slide, editorial style.",
+    "Make the reel's second beat a single giant `quote` card, no body text.",
+    "Give one reel beat a different surface from the rest, using the `surface` field.",
+    "Put a `stat` count-up on the fact beat, with its source in the note.",
     "Use a `decode` visual to translate what a powerful person says into what they mean.",
-    "Put a `compare` visual (average speaker vs Stoic leader) in both the carousel and the reel.",
+    "Put a `compare` visual (average speaker vs Stoic leader) on the lesson beat.",
     "Tell the reel's story beat in present tense, as if it is happening now.",
     "End the reel with a one-line challenge the viewer can try in their next conversation today.",
     "Use a `timeline` visual to show the story across years or a single tense day.",
 ]
-SLIDE_COUNTS = [6, 7, 8, 8, 9, 9, 10, 10, 11]
 BEAT_COUNTS = [7, 8, 8, 9, 9, 10, 11]
 FEATURED = 3
 
@@ -96,9 +95,7 @@ def roll(rng: random.Random) -> dict:
         "palette": palette,
         "fonts": rng.choice([f for f in FONT_PAIRS if f not in avoid_fonts]),
         "seed": rng.randint(1, 99999),
-        "slides": rng.choice(SLIDE_COUNTS),
         "feature_visuals": rng.sample(visual_pool, FEATURED),
-        "animated_slides": rng.choice([1, 2, 2, 3]),
         "reel_style": {
             "beats": rng.choice(BEAT_COUNTS),
             "mood": rng.choice([m for m in MOODS if m not in avoid_mood]),

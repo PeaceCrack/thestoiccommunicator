@@ -17,7 +17,7 @@ from pathlib import Path
 from slides.compose import render_slide
 from slides.motion import FPS, LOOP_S
 from slides.theme import DEFAULT_THEME, styled_brand
-from validate import validate_post
+from validate import validate_carousel
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "out"
@@ -170,7 +170,7 @@ def main() -> None:
 
     post = load_json(args.post)
     brand = styled_brand(load_json(args.brand), post)
-    problems = validate_post(post)
+    problems = validate_carousel(post)
     if problems:
         print("Post failed validation:", *problems, sep="\n  - ", file=sys.stderr)
         raise SystemExit(1)

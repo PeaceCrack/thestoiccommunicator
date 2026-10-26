@@ -46,8 +46,10 @@ def ledger() -> list[dict]:
 
 
 def _cover(post: dict) -> str:
+    """The reel hook's headline (older posts: the carousel cover)."""
+    beats = (post.get("reel") or {}).get("beats") or [{}]
     slides = post.get("slides") or [{}]
-    return slides[0].get("headline", "")
+    return beats[0].get("headline") or slides[0].get("headline", "")
 
 
 def repeats(post: dict) -> list[str]:

@@ -1,7 +1,7 @@
 # Slide catalog
 
 What a post file can use. `validate.py` enforces it and `render.py` refuses slides whose
-text spills outside the safe area. See `examples/burn-the-letters.json` for a full post (carousel + reel + YouTube).
+text spills outside the safe area. See `examples/burn-the-letters.json` for a full post. Posts are reel-only now: its `slides`, `caption` and `alt_text` are for the manual carousel renderer.
 
 ## Post level
 

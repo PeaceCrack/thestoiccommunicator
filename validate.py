@@ -1,4 +1,4 @@
-"""Checks a post file (carousel, reel, captions, YouTube metadata) before anything renders."""
+"""Checks a post file (look, sources, no repeats, reel script, captions, YouTube) before rendering."""
 
 from pathlib import Path
 
@@ -67,42 +67,33 @@ def _check_slide(index: int, slide: dict) -> list[str]:
     return errors
 
 
-def validate_post(post: dict) -> list[str]:
-    """Return a list of human-readable problems. Empty means the post is good to render."""
+def validate_carousel(post: dict) -> list[str]:
+    """Carousel rules, for render.py only. Posts are reel-only now, so the skill doesn't use this."""
     slides = post.get("slides", [])
     errors = []
-
     if not MIN_SLIDES <= len(slides) <= MAX_SLIDES:
         errors.append(f"{len(slides)} slides, want {MIN_SLIDES}-{MAX_SLIDES}")
     if slides and slides[0].get("kind") != "cover":
         errors.append("first slide must be the cover")
     if slides and slides[-1].get("kind") != "cta":
         errors.append("last slide must be the CTA")
-    if post.get("theme") not in THEMES:
-        errors.append(f"unknown theme {post.get('theme')!r}. Use one of: {', '.join(THEMES)}")
     animated = sum(1 for s in slides if s.get("animate"))
     if animated > MAX_ANIMATED:
         errors.append(f"{animated} animated slides, max {MAX_ANIMATED}")
-
-    if post.get("theme"):
-        middle = [s for s in slides if s.get("kind") in MIDDLE_KINDS]
-        with_visual = sum(1 for s in middle if s.get("visual"))
-        if middle and with_visual * 2 < len(middle):
-            errors.append(f"only {with_visual} of {len(middle)} middle slides have a visual, want at least half")
-
+    middle = [s for s in slides if s.get("kind") in MIDDLE_KINDS]
+    with_visual = sum(1 for s in middle if s.get("visual"))
+    if middle and with_visual * 2 < len(middle):
+        errors.append(f"only {with_visual} of {len(middle)} middle slides have a visual, want at least half")
     for index, slide in enumerate(slides):
         errors.extend(_check_slide(index, slide))
+    return errors
 
-    caption = post.get("caption", "")
-    if not caption:
-        errors.append("caption is empty")
-    if len(caption) > CAPTION_MAX_CHARS:
-        errors.append(f"caption is {len(caption)} chars, max {CAPTION_MAX_CHARS}")
-    hashtags = [w for w in caption.split() if w.startswith("#")]
-    if len(hashtags) > CAPTION_MAX_HASHTAGS:
-        errors.append(f"{len(hashtags)} hashtags, max {CAPTION_MAX_HASHTAGS}")
-    if not post.get("alt_text"):
-        errors.append("alt_text is missing for the cover")
+
+def validate_post(post: dict) -> list[str]:
+    """Post-level rules: the look, the tracking fields that stop repeats, sources. Empty = good."""
+    errors = []
+    if post.get("theme") not in THEMES:
+        errors.append(f"unknown theme {post.get('theme')!r}. Use one of: {', '.join(THEMES)}")
     if post.get("palette") not in PALETTES:
         errors.append(f"unknown palette {post.get('palette')!r}. Use one of: {', '.join(PALETTES)}")
     if post.get("fonts") not in FONT_PAIRS:
@@ -117,7 +108,6 @@ def validate_post(post: dict) -> list[str]:
             errors.append(f"fact {fact.get('claim', '')[:40]!r} needs a source")
     errors.extend(repeats(post))
     return errors
-
 
 PILLARS = ("think", "speak", "influence")
 BEAT_KINDS = {"hook", "story", "fact", "lesson", "quote", "takeaway", "cta"}
@@ -161,8 +151,14 @@ def validate_reel(post: dict) -> list[str]:
             errors.append(f"{label}: no em dashes")
     if beats and not REEL_MIN_WORDS <= total <= REEL_MAX_WORDS:
         errors.append(f"reel narration is {total} words, want {REEL_MIN_WORDS}-{REEL_MAX_WORDS} (30-58 s)")
-    if not post.get("reel_caption"):
+    caption = post.get("reel_caption", "")
+    if not caption:
         errors.append("reel_caption is empty")
+    if len(caption) > CAPTION_MAX_CHARS:
+        errors.append(f"reel_caption is {len(caption)} chars, max {CAPTION_MAX_CHARS}")
+    hashtags = [w for w in caption.split() if w.startswith("#")]
+    if len(hashtags) > CAPTION_MAX_HASHTAGS:
+        errors.append(f"{len(hashtags)} hashtags in reel_caption, max {CAPTION_MAX_HASHTAGS}")
     yt = post.get("youtube") or {}
     title = yt.get("title", "")
     if not title or len(title) > YT_TITLE_MAX or "<" in title or ">" in title:

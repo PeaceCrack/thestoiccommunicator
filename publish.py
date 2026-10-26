@@ -1,4 +1,4 @@
-"""Publish a rendered post: Instagram carousel, Instagram Reel, YouTube Short.
+"""Publish a rendered post: the reel goes up as an Instagram Reel and as a YouTube Short.
 
 Dry run by default: it prints exactly what it would send and posts nothing. Add --publish to
 post for real. Each platform is recorded in published.json the moment it succeeds, so a rerun
@@ -33,7 +33,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 POSTS = ROOT / "posts"
 LEDGER = ROOT / "published.json"
-PLATFORMS = ("ig_carousel", "ig_reel", "youtube")
+PLATFORMS = ("ig_reel", "youtube")
 IG_ENV = ("IG_USER_ID", "IG_ACCESS_TOKEN", "MEDIA_BASE_URL")
 YT_ENV = ("YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN")
 POLL_INTERVAL_S = 5
@@ -79,8 +79,7 @@ def out_dir(post: dict) -> Path:
 
 def is_rendered(post: dict) -> bool:
     folder = out_dir(post)
-    slides = all((folder / f"{i:02d}.jpg").exists() for i in range(1, len(post["slides"]) + 1))
-    return slides and (folder / "reel.mp4").exists() and (folder / "reel_cover.jpg").exists()
+    return (folder / "reel.mp4").exists() and (folder / "reel_cover.jpg").exists()
 
 
 def next_post_path() -> Path | None:
@@ -104,14 +103,6 @@ def video_base(base: str) -> str:
 
 def folder_url(base: str, post: dict) -> str:
     return base.replace("{slug}", post["slug"]).rstrip("/")
-
-
-def carousel_items(post: dict, image_base: str, vid_base: str) -> list[dict]:
-    """One entry per slide: the still JPEG, plus the MP4 when the slide is animated."""
-    images, videos = folder_url(image_base, post), folder_url(vid_base, post)
-    return [{"image": f"{images}/{i:02d}.jpg",
-             "video": f"{videos}/{i:02d}.mp4" if (out_dir(post) / f"{i:02d}.mp4").exists() else None}
-            for i in range(1, len(post["slides"]) + 1)]
 
 
 # ---------- http ----------
@@ -197,25 +188,6 @@ def ig_publish(cfg: dict, container: str) -> str:
     return result["id"]
 
 
-def publish_carousel(post: dict, cfg: dict) -> tuple[str, list[int]]:
-    children, fallbacks = [], []
-    for n, item in enumerate(carousel_items(post, cfg["media_base"], cfg["video_base"]), start=1):
-        if item["video"]:
-            try:
-                children.append(ig_create(cfg, {"media_type": "VIDEO", "video_url": item["video"],
-                                                "is_carousel_item": "true"}))
-                print(f"  slide {n:02d} video")
-                continue
-            except PublishError as err:
-                print(f"  slide {n:02d} video rejected, using the still: {err}")
-                fallbacks.append(n)
-        children.append(ig_create(cfg, {"image_url": item["image"], "is_carousel_item": "true"}))
-        print(f"  slide {n:02d} image")
-    carousel = ig_create(cfg, {"media_type": "CAROUSEL", "children": ",".join(children),
-                               "caption": post["caption"]})
-    return ig_publish(cfg, carousel), fallbacks
-
-
 WARM_ATTEMPTS = 12
 WARM_INTERVAL_S = 10
 REEL_RETRY_WAIT_S = 30
@@ -299,9 +271,6 @@ def dry_run(post: dict, todo: list[str]) -> None:
     vbase = os.environ.get("VIDEO_BASE_URL", "") or video_base(base)
     print(f"DRY RUN for {post['slug']}, nothing will be posted. Add --publish to post.")
     print(f"Would publish: {', '.join(todo)}\n")
-    if "ig_carousel" in todo:
-        print("Carousel:", *[i["video"] or i["image"] for i in carousel_items(post, base, vbase)], sep="\n  ")
-        print(f"Caption ({len(post['caption'])} chars):\n{post['caption']}\n")
     if "ig_reel" in todo:
         print(f"Reel: {folder_url(vbase, post)}/reel.mp4  cover {folder_url(base, post)}/reel_cover.jpg")
         print(f"Reel caption:\n{post['reel_caption']}\n")
@@ -317,12 +286,8 @@ def publish_all(post: dict, todo: list[str]) -> list[str]:
     cfg = None
     for platform in todo:
         try:
-            if platform in ("ig_carousel", "ig_reel") and cfg is None:
-                cfg = ig_config()
-            if platform == "ig_carousel":
-                media_id, fallbacks = publish_carousel(post, cfg)
-                record(post["slug"], platform, media_id, {"video_fallbacks": fallbacks} if fallbacks else None)
-            elif platform == "ig_reel":
+            if platform == "ig_reel":
+                cfg = cfg or ig_config()
                 media_id = publish_reel(post, cfg)
                 record(post["slug"], platform, media_id)
             else:
@@ -368,7 +333,7 @@ def main() -> None:
     errors = publish_all(post, todo)
     if errors:
         raise SystemExit("Some platforms failed (the rest are recorded):\n  " + "\n  ".join(errors))
-    print(f"Published {post['slug']} on {', '.join(todo)}. Add the alt text in the app: {post['alt_text']}")
+    print(f"Published {post['slug']} on {', '.join(todo)}.")
 
 
 if __name__ == "__main__":
