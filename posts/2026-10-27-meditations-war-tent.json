@@ -1,0 +1,226 @@
+{
+  "slug": "meditations-war-tent",
+  "date": "2026-10-27",
+  "pillar": "think",
+  "philosopher": "Marcus Aurelius",
+  "mental_model": "Mental Clarity Deficit",
+  "topic": "Meditations in a war tent: the emperor who wrote short notes to himself on the Danube front, and why 3 written lines beat a foggy head",
+  "story": {
+    "title": "Marcus Aurelius writes the Meditations on campaign against the Quadi",
+    "who": "Marcus Aurelius, Roman emperor",
+    "when": "The Danube frontier, Marcomannic Wars, c. 170-180 AD",
+    "source": "Marcus Aurelius, Meditations 1.17 ('Among the Quadi at the Granua') and 2.17 ('This in Carnuntum'), trans. George Long; Cassius Dio, Roman History 72.6"
+  },
+  "takeaway": "Before you decide anything big, write 3 lines: what is true, what is yours to control, and what you will do.",
+  "quotes": [
+    "Let thy principles be brief and fundamental.",
+    "Among the Quadi at the Granua."
+  ],
+  "facts": [
+    {
+      "claim": "Marcus was frail in body, at first could not endure the cold, and took very little food, always at night",
+      "source": "Cassius Dio, Roman History 72.6, trans. Earnest Cary (Loeb)"
+    }
+  ],
+  "theme": "colosseum",
+  "palette": "olive-grove",
+  "fonts": "dm-serif",
+  "seed": 64072,
+  "reel_style": {
+    "beats": 11,
+    "mood": "contemplative",
+    "takeaway_transition": "smoothup",
+    "grade": "noir-tint",
+    "camera_moves": [
+      "push",
+      "pan-right",
+      "tilt-up",
+      "pan-left",
+      "pull"
+    ],
+    "caption_style": "pill",
+    "caption_font": "Arial Black"
+  },
+  "search_terms": [
+    "marcus aurelius meditations",
+    "mental clarity"
+  ],
+  "reel": {
+    "beats": [
+      {
+        "kind": "hook",
+        "kicker": "THE DANUBE, 170s AD",
+        "headline": "WRITTEN IN A WAR TENT",
+        "media": {
+          "type": "art",
+          "query": "Column of Marcus Aurelius detail",
+          "title": "File:Column of Marcus Aurelius, detail, Rome, Italy.jpg",
+          "file": "out/meditations-war-tent/media/01.jpg",
+          "credit": "File:Column of Marcus Aurelius, detail, Rome, Italy.jpg (Wikimedia Commons)",
+          "license": "CC0",
+          "page": "https://commons.wikimedia.org/wiki/File:Column_of_Marcus_Aurelius,_detail,_Rome,_Italy.jpg"
+        },
+        "voice": "On the Danube frontier, Rome's emperor writes a book nobody was meant to read.",
+        "emphasis": "nobody"
+      },
+      {
+        "kind": "story",
+        "media": {
+          "type": "art",
+          "query": "Battle of the Quadi",
+          "title": "File:Franz Kollarž - The Battle of the Quadi.jpg",
+          "file": "out/meditations-war-tent/media/02.jpg",
+          "credit": "File:Franz Kollarž - The Battle of the Quadi.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Franz_Kollar%C5%BE_-_The_Battle_of_the_Quadi.jpg"
+        },
+        "voice": "Rewind. Tribes cross the river. Marcus Aurelius goes to the front himself."
+      },
+      {
+        "kind": "story",
+        "media": {
+          "type": "art",
+          "query": "Marcus Aurelius profectio relief",
+          "title": "File:Marcus Aurelius relief, Adventus, Profectio.jpg",
+          "file": "out/meditations-war-tent/media/03.jpg",
+          "credit": "File:Marcus Aurelius relief, Adventus, Profectio.jpg (Wikimedia Commons)",
+          "license": "CC0",
+          "page": "https://commons.wikimedia.org/wiki/File:Marcus_Aurelius_relief,_Adventus,_Profectio.jpg"
+        },
+        "voice": "Not for a season. For years."
+      },
+      {
+        "kind": "story",
+        "media": {
+          "type": "art",
+          "query": "Marcus Aurelius bust",
+          "title": "File:Marcus Aurelius Glyptothek Munich.jpg",
+          "file": "out/meditations-war-tent/media/04.jpg",
+          "credit": "File:Marcus Aurelius Glyptothek Munich.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Marcus_Aurelius_Glyptothek_Munich.jpg"
+        },
+        "voice": "Cassius Dio says he is frail. He barely eats."
+      },
+      {
+        "kind": "story",
+        "media": {
+          "type": "art",
+          "query": "clemency of Marcus Aurelius relief",
+          "title": "File:“The clemency of the emperor” Relief panel from a triumphal arch of Marcus Aurelius.jpg",
+          "file": "out/meditations-war-tent/media/05.jpg",
+          "credit": "File:“The clemency of the emperor” Relief panel from a triumphal arch of Marcus Aurelius.jpg (Wikimedia Commons)",
+          "license": "CC0",
+          "page": "https://commons.wikimedia.org/wiki/File:%E2%80%9CThe_clemency_of_the_emperor%E2%80%9D_Relief_panel_from_a_triumphal_arch_of_Marcus_Aurelius.jpg"
+        },
+        "voice": "And every decision lands on him."
+      },
+      {
+        "kind": "turn",
+        "headline": "HE WRITES TO HIMSELF",
+        "media": {
+          "type": "art",
+          "query": "Roman inkwell and stylus",
+          "title": "File:Terracotta inkwell and bronze stylus MET DP121128.jpg",
+          "file": "out/meditations-war-tent/media/06.jpg",
+          "credit": "File:Terracotta inkwell and bronze stylus MET DP121128.jpg (Wikimedia Commons)",
+          "license": "CC0",
+          "page": "https://commons.wikimedia.org/wiki/File:Terracotta_inkwell_and_bronze_stylus_MET_DP121128.jpg"
+        },
+        "voice": "So he writes notes to himself. Not for readers. For clarity.",
+        "emphasis": "himself"
+      },
+      {
+        "kind": "story",
+        "headline": "Among the Quadi, at the Granua",
+        "media": {
+          "type": "art",
+          "query": "Column of Marcus Aurelius rain miracle Quadi",
+          "title": "File:Colonna aureliana, rilievi 02.jpg",
+          "file": "out/meditations-war-tent/media/07.jpg",
+          "credit": "File:Colonna aureliana, rilievi 02.jpg (Wikimedia Commons)",
+          "license": "Public domain",
+          "page": "https://commons.wikimedia.org/wiki/File:Colonna_aureliana,_rilievi_02.jpg"
+        },
+        "voice": "One book ends: among the Quadi, at the Granua."
+      },
+      {
+        "kind": "story",
+        "headline": "A notebook from the front",
+        "visual": {
+          "type": "timeline",
+          "items": [
+            [
+              "160s",
+              "Tribes cross the Danube"
+            ],
+            [
+              "170s",
+              "Notes in camp"
+            ],
+            [
+              "180 AD",
+              "Dies on campaign"
+            ]
+          ]
+        },
+        "voice": "Those notes became the Meditations."
+      },
+      {
+        "kind": "quote",
+        "visual": {
+          "type": "quote",
+          "text": "Let thy principles be brief and fundamental.",
+          "who": "Marcus Aurelius, Meditations 4.3"
+        },
+        "voice": "His rule: let thy principles be brief and fundamental."
+      },
+      {
+        "kind": "lesson",
+        "headline": "WRITE 3 LINES FIRST",
+        "visual": {
+          "type": "checklist",
+          "items": [
+            "What is true?",
+            "What is mine?",
+            "What will I do?"
+          ],
+          "done": 3
+        },
+        "voice": "Before anything big, write 3 lines. What is true. What is mine. What next.",
+        "emphasis": "lines"
+      },
+      {
+        "kind": "cta",
+        "headline": "FOLLOW FOR STOIC POWER",
+        "body": "Think like Plato. Speak like a leader. Influence like a CEO.",
+        "voice": "Try it before your next conversation today. Follow to think like Plato, speak like a leader, influence like a CEO."
+      }
+    ]
+  },
+  "reel_caption": "The Meditations were written on a war front.\n\nIn the 170s AD, Marcus Aurelius spent years in camps along the Danube, fighting the Marcomanni and the Quadi. Cassius Dio says he was frail and barely ate. Every decision in the empire still landed on him.\n\nSo he wrote short notes to himself, in Greek. Book 1 of his Meditations ends with a place, not a flourish: \"Among the Quadi at the Granua.\"\n\nHis rule for those notes, from Meditations 4.3: \"Let thy principles be brief and fundamental.\"\n\nThat's the Marcus Aurelius Meditations habit I'd steal for mental clarity. Before anything big, write 3 lines. What's true. What's mine. What I'll do next.\n\nTry it before your next hard conversation today, then tell me in the comments what your 3 lines were.\n\n#stoicism #marcusaurelius #leadership",
+  "youtube": {
+    "title": "The Emperor Who Wrote Notes Between Battles #Shorts",
+    "description": "Marcus Aurelius wrote the Meditations as private notes on the Danube front. Book 1 ends \"Among the Quadi at the Granua.\" Sources: Meditations 1.17 and 4.3 (trans. George Long); Cassius Dio, Roman History 72.6.\n\nThink like Plato. Speak like a leader. Influence like a CEO.\n\nVisuals: public-domain and CC0 art via Wikimedia Commons, including The Met Open Access.\n\n#Shorts #stoicism #marcusaurelius",
+    "tags": [
+      "marcus aurelius",
+      "meditations",
+      "marcus aurelius meditations",
+      "stoicism",
+      "mental clarity",
+      "journaling",
+      "decision making",
+      "leadership",
+      "philosophy"
+    ]
+  },
+  "credits": [
+    "File:Column of Marcus Aurelius, detail, Rome, Italy.jpg (Wikimedia Commons)",
+    "File:Franz Kollarž - The Battle of the Quadi.jpg (Wikimedia Commons)",
+    "File:Marcus Aurelius relief, Adventus, Profectio.jpg (Wikimedia Commons)",
+    "File:Marcus Aurelius Glyptothek Munich.jpg (Wikimedia Commons)",
+    "File:“The clemency of the emperor” Relief panel from a triumphal arch of Marcus Aurelius.jpg (Wikimedia Commons)",
+    "File:Terracotta inkwell and bronze stylus MET DP121128.jpg (Wikimedia Commons)",
+    "File:Colonna aureliana, rilievi 02.jpg (Wikimedia Commons)"
+  ]
+}
